@@ -512,8 +512,7 @@ components:
         categories:
           type: array
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/BicycleCategoryType'
         equipments:
           type: array
           items:
@@ -545,8 +544,7 @@ components:
         categories:
           type: array
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/BicycleCategoryType'
         equipments:
           type: array
           items:
@@ -582,8 +580,7 @@ components:
         categories:
           type: array
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/BicycleCategoryType'
         equipments:
           type: array
           items:
@@ -672,6 +669,14 @@ components:
           type: string
           default: Bearer
           description: Tipo di token (Bearer).
+    BicycleCategoryType:
+      type: string
+      enum:
+        - ROAD
+        - MOUNTAIN
+        - ELECTRIC
+        - BMX
+        - RACING
     EquipmentType:
       type: string
       enum:
