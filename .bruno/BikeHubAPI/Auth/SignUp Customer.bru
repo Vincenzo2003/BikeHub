@@ -1,0 +1,23 @@
+meta {
+  name: SignUp Customer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/signUp
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "vincenzo.guarino001@studenti.uniparthenope.it",
+    "password": "1234qwer",
+    "phoneNumber": "+393409352023",
+    "username": "vgu",
+    "name": "vincenzo",
+    "surname": "guarino",
+    "role": "ADMIN"
+  }
+}

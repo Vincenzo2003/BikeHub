@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: bikehub
+    secret: MjU0Nzg4N2JlNWVhZWM5Yzk1NTg0ZmI4OTJlNWNhOGQzOGI4NWU0MjY1YmFiYjljN2M3ZjdiNTI1NmUwZDYzNQ==
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bikehub_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    org.springframework.web: DEBUG
