@@ -1,0 +1,23 @@
+meta {
+  name: createBicycle
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/bicycle
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "currentParkingLotName": "",
+    "categories": [],
+    "equipments": [],
+    "chassisId": "",
+    "brand": "",
+    "model": "",
+    "hourlyPrice": ""
+  }
+}

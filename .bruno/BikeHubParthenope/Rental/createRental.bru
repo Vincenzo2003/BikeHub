@@ -1,0 +1,19 @@
+meta {
+  name: createRental
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/rental
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "pickUpParkingLot": "",
+    "returnParkingLot": "",
+    "bicycle": ""
+  }
+}

@@ -1,0 +1,28 @@
+meta {
+  name: SignUp.
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/signUp
+  body: json
+  auth: none
+}
+
+params:query {
+  ~isAdmin: 
+  ~token: 
+}
+
+body:json {
+  {
+    "email": "",
+    "password": "",
+    "phoneNumber": "",
+    "username": "",
+    "name": "",
+    "surname": "",
+    "role": ""
+  }
+}

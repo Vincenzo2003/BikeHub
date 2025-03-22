@@ -1,0 +1,15 @@
+meta {
+  name: deleteRental
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/rental
+  body: none
+  auth: none
+}
+
+params:path {
+  rentalId: 
+}

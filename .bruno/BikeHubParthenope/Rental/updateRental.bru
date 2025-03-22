@@ -1,0 +1,26 @@
+meta {
+  name: updateRental
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/rental
+  body: json
+  auth: none
+}
+
+params:path {
+  rentalId: 
+}
+
+body:json {
+  {
+    "returnParkingLot": "",
+    "bicycle": "",
+    "startedAt": "",
+    "finishedAt": "",
+    "totalPrice": "",
+    "mileage": ""
+  }
+}
