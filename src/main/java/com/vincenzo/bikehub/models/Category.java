@@ -13,8 +13,6 @@ import java.util.UUID;
 @Setter
 public class Category {
 
-    private UUID id;
-
     private CategoryType type;
 
     private String description;

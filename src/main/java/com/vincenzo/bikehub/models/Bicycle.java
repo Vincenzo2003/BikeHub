@@ -1,6 +1,7 @@
 package com.vincenzo.bikehub.models;
 
 import com.vincenzo.bikehub.enums.BicycleStatus;
+import com.vincenzo.bikehub.enums.CategoryType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,15 +18,15 @@ public class Bicycle {
 
     private UUID id;
 
-    private ParkingLot currentParkingLot;
+    private String currentParkingLotName;
 
-    private List<Category> categories;
+    private List<CategoryType> categories;
 
-    private List<Equipment> equipments;
+    private List<UUID> equipmentsIds;
 
     private String chassisId;
 
-    private BicycleStatus status;
+    private BicycleStatus status = BicycleStatus.AVAILABLE;
 
     private String brand;
 

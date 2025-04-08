@@ -7,6 +7,7 @@ import com.vincenzo.bikehub.server.gen.model.CreateBicycleResponse;
 import com.vincenzo.bikehub.server.gen.model.RetrieveBicycleResponse;
 import com.vincenzo.bikehub.server.gen.model.UpdateBicycleRequest;
 import com.vincenzo.bikehub.service.BicycleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-public class Bicycle implements BicycleApi {
+public class BicycleController implements BicycleApi {
 
     private final BicycleService bicycleService;
     private final BicycleMapper bicycleMapper;
 
-    public Bicycle(
+    @Autowired
+    public BicycleController(
         BicycleService bicycleService,
         BicycleMapper bicycleMapper
     ) {

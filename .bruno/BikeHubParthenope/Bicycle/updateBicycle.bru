@@ -5,24 +5,13 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/bicycle
+  url: {{baseUrl}}/bicycle/7266cc5c-fcc0-4cd5-9bd8-bbc9c2839579
   body: json
   auth: none
 }
 
-params:path {
-  bicycleId: 
-}
-
 body:json {
   {
-    "currentParkingLotName": "",
-    "categories": [],
-    "equipments": [],
-    "chassisId": "",
-    "status": "",
-    "brand": "",
-    "model": "",
-    "hourlyPrice": ""
+    "hourlyPrice": 10
   }
 }

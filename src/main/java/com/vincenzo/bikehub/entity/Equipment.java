@@ -20,7 +20,8 @@ public class Equipment {
     @Column(columnDefinition = "UUID")
     private UUID id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
+    @Getter
     private Bicycle bicycle;
 
     @Column(nullable = false)
@@ -35,3 +36,4 @@ public class Equipment {
     @Column
     private String imageUrl;
 }
+

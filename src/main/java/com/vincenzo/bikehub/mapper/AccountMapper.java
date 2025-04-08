@@ -39,7 +39,7 @@ public abstract class AccountMapper {
     @Mapping(target = "rentals", ignore = true)
     public abstract Account loginRequestToModel(LoginRequest AccountSignUpData);
 
-
+    @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "rentals", ignore = true)
     public abstract com.vincenzo.bikehub.entity.Account modelToEntity(Account Account);
 

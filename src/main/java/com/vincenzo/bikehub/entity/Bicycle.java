@@ -1,6 +1,7 @@
 package com.vincenzo.bikehub.entity;
 
 import com.vincenzo.bikehub.enums.BicycleStatus;
+import com.vincenzo.bikehub.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -25,10 +27,10 @@ public class Bicycle {
     @Column(columnDefinition = "UUID")
     private UUID id;
 
-    @OneToOne(cascade = {CascadeType.PERSIST}, optional = false)
+    @ManyToOne
     private ParkingLot currentParkingLot;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @ManyToMany
     private List<Category> categories;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -39,7 +41,7 @@ public class Bicycle {
     private String chassisId;
 
     @Column(nullable = false)
-    private BicycleStatus status;
+    private BicycleStatus status = BicycleStatus.AVAILABLE;
 
     @Column(nullable = false)
     private String brand;
@@ -55,4 +57,25 @@ public class Bicycle {
 
     @CreatedDate
     private Instant registeredAt;
+
+    @Transient
+    public List<UUID> getEquipmentsIds() {
+        if (equipments == null) {
+            return List.of();
+        }
+        return equipments.stream()
+            .map(Equipment::getId)
+            .collect(Collectors.toList());
+    }
+
+    @Transient
+    public List<CategoryType> getCategoriesTypes() {
+        if (categories == null) {
+            return List.of();
+        }
+        return categories.stream()
+                .map(Category::getType)
+                .collect(Collectors.toList());
+    }
+
 }

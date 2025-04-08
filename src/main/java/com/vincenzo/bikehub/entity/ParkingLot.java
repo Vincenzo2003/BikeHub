@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -16,17 +17,24 @@ import java.util.UUID;
 public class ParkingLot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition = "UUID")
-    private UUID id;
-
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
     private String address;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany
     private List<Bicycle> parkedBicycles;
+
+    @Transient
+    public List<UUID> getParkedBicyclesIds() {
+        if (parkedBicycles == null) {
+            return List.of();
+        }
+        return parkedBicycles.stream()
+                .map(Bicycle::getId)
+                .collect(Collectors.toList());
+    }
+
 
 }

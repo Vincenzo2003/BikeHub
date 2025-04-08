@@ -91,6 +91,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /bicycle/{bicycleId}:
     get:
       description: Retrieve bicycle.
       operationId: retrieveBicycle
@@ -402,9 +403,11 @@ components:
           format: date-time
           nullable: true
         totalPrice:
-          type: float
+          type: number
+          format: float
         mileage:
-          type: float
+          type: number
+          format: float
     RetrieveRentalResponse:
       type: object
       properties:
@@ -433,11 +436,13 @@ components:
           format: date-time
           nullable: true
         totalPrice:
-          type: float
+          type: number
+          format: float
         status:
           $ref: '#/components/schemas/RentalStatus'
         mileage:
-          type: float
+          type: number
+          format: float
     CreateRentalRequest:
       type: object
       properties:
@@ -513,11 +518,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BicycleCategoryType'
-        equipments:
-          type: array
-          items:
-            type: string
-            format: uuid
         chassisId:
           type: string
         status:
@@ -527,7 +527,8 @@ components:
         model:
           type: string
         hourlyPrice:
-          type: float
+          type: number
+          format: float
     RetrieveBicycleResponse:
       type: object
       required:
@@ -559,9 +560,11 @@ components:
         model:
           type: string
         totalRentTime:
-          type: float
+          type: number
+          format: float
         hourlyPrice:
-          type: float
+          type: number
+          format: float
         registeredAt:
           type: string
           format: date-time
@@ -577,23 +580,23 @@ components:
       properties:
         currentParkingLotName:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         categories:
           type: array
           items:
             $ref: '#/components/schemas/BicycleCategoryType'
-        equipments:
-          type: array
-          items:
-            type: string
-            format: uuid
         chassisId:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         brand:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         model:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         hourlyPrice:
-          type: float
+          type: number
+          format: float
     CreateBicycleResponse:
       type: object
       required:

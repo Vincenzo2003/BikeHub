@@ -13,12 +13,10 @@ import java.util.UUID;
 @Setter
 public class ParkingLot {
 
-    private UUID id;
-
     private String name;
 
     private String address;
 
-    private List<Bicycle> parkedBicycles;
+    private List<UUID> parkedBicyclesIds;
 
 }

@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.models;
 
-import com.vincenzo.bikehub.entity.Bicycle;
 import com.vincenzo.bikehub.enums.EquipmentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ public class Equipment {
 
     private UUID id;
 
-    private Bicycle bicycle;
+    private UUID bicycleId;
 
     private EquipmentType type;
 

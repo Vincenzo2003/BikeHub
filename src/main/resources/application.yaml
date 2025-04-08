@@ -2,6 +2,9 @@ spring:
   application:
     name: bikehub
     secret: MjU0Nzg4N2JlNWVhZWM5Yzk1NTg0ZmI4OTJlNWNhOGQzOGI4NWU0MjY1YmFiYjljN2M3ZjdiNTI1NmUwZDYzNQ==
+  sql:
+    init:
+      mode: always
 
   datasource:
     url: jdbc:postgresql://localhost:5432/bikehub_db
@@ -12,6 +15,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    defer-datasource-initialization: true
 
 logging:
   level:

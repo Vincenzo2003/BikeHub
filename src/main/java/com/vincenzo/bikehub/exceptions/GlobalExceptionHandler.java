@@ -60,6 +60,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(BicycleSavingException.class)
+    public ResponseEntity<ExceptionResponse> handleBicycleSavingException(BicycleSavingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(BicycleChassisIdAlreadyRegisteredException.class)
+    public ResponseEntity<ExceptionResponse> handleBicycleChassisIdAlreadyRegisteredException(BicycleChassisIdAlreadyRegisteredException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(ParkingLotNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleParkingLotNotFoundException(ParkingLotNotFoundException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(BicycleNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleBicycleNotFoundException(BicycleNotFoundException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);
@@ -78,7 +96,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
-    @ExceptionHandler(AccountAlreadyExistsException.class)
+    @ExceptionHandler(AccountCreationException.class)
     public ResponseEntity<ExceptionResponse> handleAccountCreationException(AccountCreationException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
