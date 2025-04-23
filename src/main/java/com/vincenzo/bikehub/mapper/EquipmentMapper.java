@@ -1,19 +1,12 @@
 package com.vincenzo.bikehub.mapper;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.enums.EquipmentType;
-import com.vincenzo.bikehub.models.Bicycle;
-import com.vincenzo.bikehub.models.Category;
 import com.vincenzo.bikehub.models.Equipment;
-import com.vincenzo.bikehub.server.gen.model.BicycleCategoryType;
 import com.vincenzo.bikehub.server.gen.model.CreateEquipment201Response;
 import com.vincenzo.bikehub.server.gen.model.CreateEquipmentRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
-
-import java.util.List;
 
 
 @Mapper(

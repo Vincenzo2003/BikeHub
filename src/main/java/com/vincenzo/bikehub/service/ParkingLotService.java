@@ -24,7 +24,14 @@ public class ParkingLotService {
         this.parkingLotMapper = parkingLotMapper;
     }
 
-    public ParkingLot getParkingLot(String name) {
+    public com.vincenzo.bikehub.entity.ParkingLot getParkingLotEntity(String name) {
+        com.vincenzo.bikehub.entity.ParkingLot parkingLotEntity =
+                parkingLotRepository.findByName(name)
+                        .orElseThrow(ParkingLotNotFoundException::new);
+        return parkingLotEntity;
+    }
+
+    public ParkingLot getParkingLotModel(String name) {
         com.vincenzo.bikehub.entity.ParkingLot parkingLotEntity =
                 parkingLotRepository.findByName(name)
                         .orElseThrow(ParkingLotNotFoundException::new);

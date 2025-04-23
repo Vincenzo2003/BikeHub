@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.UUID;
 
-public class Rental implements RentalApi {
+public class RentalController implements RentalApi {
     @Override
     public ResponseEntity<CreateEquipment201Response> createRental(CreateRentalRequest createRentalRequest) {
         return null;

@@ -60,6 +60,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(EquipmentSavingException.class)
+    public ResponseEntity<ExceptionResponse> handleEquipmentSavingException(EquipmentSavingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(BicycleSavingException.class)
     public ResponseEntity<ExceptionResponse> handleBicycleSavingException(BicycleSavingException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);

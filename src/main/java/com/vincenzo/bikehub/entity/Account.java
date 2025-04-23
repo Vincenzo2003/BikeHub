@@ -27,12 +27,6 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String name;
-
-    @Column
-    private String surname;
-
     @Column(unique = true, nullable = false)
     private String email;
 

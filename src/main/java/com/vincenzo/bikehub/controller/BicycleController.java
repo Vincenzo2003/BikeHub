@@ -45,16 +45,21 @@ public class BicycleController implements BicycleApi {
 
     @Override
     public ResponseEntity<RetrieveBicycleResponse> retrieveBicycle(UUID bicycleId) {
-        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.getBicycle(bicycleId);
+        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.getBicycleModel(bicycleId);
         RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
         return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<RetrieveBicycleResponse> updateBicycle(UUID bicycleId, UpdateBicycleRequest updateBicycleRequest) {
-        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
-        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
-        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
-        return ResponseEntity.ok(response);
+        return null;
     }
+
+//    @Override
+//    public ResponseEntity<RetrieveBicycleResponse> updateBicycle(UUID bicycleId, UpdateBicycleRequest updateBicycleRequest) {
+//        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
+//        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
+//        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
+//        return ResponseEntity.ok(response);
+//    }
 }

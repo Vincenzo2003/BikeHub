@@ -25,8 +25,8 @@ public class EquipmentService {
     @Autowired
     public EquipmentService(
             EquipmentRepository equipmentRepository,
-            EquipmentMapper equipmentMapper,
-            BicycleService bicycleService) {
+            EquipmentMapper equipmentMapper, BicycleService bicycleService
+    ) {
         this.equipmentRepository = equipmentRepository;
         this.equipmentMapper = equipmentMapper;
         this.bicycleService = bicycleService;
@@ -42,7 +42,13 @@ public class EquipmentService {
     @Transactional
     public Equipment createEquipment(Equipment equipment) {
         com.vincenzo.bikehub.entity.Equipment equipmentEntity = new com.vincenzo.bikehub.entity.Equipment();
-        try {
+        equipmentEntity.setId(UUID.randomUUID());
+        equipmentEntity.setName(equipment.getName());
+        equipmentEntity.setBicycle(bicycleService.getBicycleEntity(equipment.getBicycleId()));
+        equipmentEntity.setType(equipment.getType());
+        equipmentEntity.setDescription(equipment.getName());
+        equipmentEntity.setImageUrl(equipment.getDescription());
+    try {
             equipmentEntity = equipmentRepository.saveAndFlush(equipmentEntity);
         } catch (DataIntegrityViolationException exc){
             throw new BicycleSavingException();

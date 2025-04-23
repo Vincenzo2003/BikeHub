@@ -11,12 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Auth implements AuthApi {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
     @Autowired
-    public Auth(AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -26,7 +26,7 @@ public class Auth implements AuthApi {
     }
 
     @Override
-    public ResponseEntity<SignUpResponse> signUp(SignUpRequest signUpRequest, Boolean isAdmin, String token) {
+    public ResponseEntity<SignUpResponse> signUp(SignUpRequest signUpRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(signUpRequest));
     }
 

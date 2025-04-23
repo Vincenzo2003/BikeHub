@@ -12,15 +12,6 @@ paths:
       operationId: SignUp
       tags:
         - Authentication
-      parameters:
-        - in: query
-          name: isAdmin
-          schema:
-            type: boolean
-        - in: query
-          name: token
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -517,7 +508,8 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/BicycleCategoryType'
+            $ref: '#/components/schemas/BicycleCategory'
+          uniqueItems: true
         chassisId:
           type: string
         status:
@@ -545,7 +537,8 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/BicycleCategoryType'
+            $ref: '#/components/schemas/BicycleCategory'
+          uniqueItems: true
         equipments:
           type: array
           items:
@@ -584,7 +577,8 @@ components:
         categories:
           type: array
           items:
-            $ref: '#/components/schemas/BicycleCategoryType'
+            $ref: '#/components/schemas/BicycleCategory'
+          uniqueItems: true
         chassisId:
           type: string
           x-field-extra-annotation: "@NotBlank"
@@ -639,7 +633,6 @@ components:
           description: Account's surname
         role:
           $ref: '#/components/schemas/AccountRole'
-          default: 'CUSTOMER'
           description: Account's role
     SignUpResponse:
       type: object
@@ -672,7 +665,7 @@ components:
           type: string
           default: Bearer
           description: Tipo di token (Bearer).
-    BicycleCategoryType:
+    BicycleCategory:
       type: string
       enum:
         - ROAD
@@ -694,6 +687,7 @@ components:
         - UNDER_MAINTENANCE
     AccountRole:
       type: string
+      default: CUSTOMER
       enum:
         - CUSTOMER
         - ADMIN

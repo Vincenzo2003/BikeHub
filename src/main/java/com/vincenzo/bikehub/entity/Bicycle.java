@@ -1,7 +1,7 @@
 package com.vincenzo.bikehub.entity;
 
 import com.vincenzo.bikehub.enums.BicycleStatus;
-import com.vincenzo.bikehub.enums.CategoryType;
+import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,8 +32,10 @@ public class Bicycle {
     @ManyToOne
     private ParkingLot currentParkingLot;
 
-    @ManyToMany
-    private List<Category> categories;
+    @ElementCollection(targetClass = BicycleCategory.class)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categories")
+    private Set<BicycleCategory> categories = new HashSet<>(); // Initialize to avoid NullPointerException
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Equipment> equipments;
@@ -67,15 +71,4 @@ public class Bicycle {
             .map(Equipment::getId)
             .collect(Collectors.toList());
     }
-
-    @Transient
-    public List<CategoryType> getCategoriesTypes() {
-        if (categories == null) {
-            return List.of();
-        }
-        return categories.stream()
-                .map(Category::getType)
-                .collect(Collectors.toList());
-    }
-
 }

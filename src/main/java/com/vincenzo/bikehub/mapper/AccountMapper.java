@@ -30,8 +30,6 @@ public abstract class AccountMapper {
     public abstract Account signUpRequestToModel(SignUpRequest AccountSignUpData);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "name", ignore = true)
-    @Mapping(target = "surname", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "phoneNumber", ignore = true)
     @Mapping(target = "role", ignore = true)

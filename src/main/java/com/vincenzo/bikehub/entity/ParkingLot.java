@@ -35,6 +35,4 @@ public class ParkingLot {
                 .map(Bicycle::getId)
                 .collect(Collectors.toList());
     }
-
-
 }
