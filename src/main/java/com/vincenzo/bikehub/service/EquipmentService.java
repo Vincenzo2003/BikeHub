@@ -42,7 +42,6 @@ public class EquipmentService {
     @Transactional
     public Equipment createEquipment(Equipment equipment) {
         com.vincenzo.bikehub.entity.Equipment equipmentEntity = new com.vincenzo.bikehub.entity.Equipment();
-        equipmentEntity.setId(UUID.randomUUID());
         equipmentEntity.setName(equipment.getName());
         equipmentEntity.setBicycle(bicycleService.getBicycleEntity(equipment.getBicycleId()));
         equipmentEntity.setType(equipment.getType());

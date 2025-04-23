@@ -37,7 +37,7 @@ public class Bicycle {
     @Column(name = "categories")
     private Set<BicycleCategory> categories = new HashSet<>(); // Initialize to avoid NullPointerException
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Equipment> equipments;
 
     // index
