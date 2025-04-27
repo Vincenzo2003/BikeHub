@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.mapper;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.enums.EquipmentType;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.server.gen.model.*;
@@ -24,6 +23,12 @@ public abstract class BicycleMapper {
     @Mapping(target = "equipmentsIds", ignore = true)
     public abstract Bicycle createBicycleRequestToModel(CreateBicycleRequest createBicycleRequest);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "totalRentTime", ignore = true)
+    @Mapping(target = "registeredAt", ignore = true)
+    @Mapping(target = "equipmentsIds", ignore = true)
+    @Mapping(target = "chassisId", ignore = true)
+    public abstract Bicycle updateBicycleRequestToModel(UpdateBicycleRequest updateBicycleRequest);
 
     public abstract CreateBicycleResponse modelToCreateBicycleResponse(Bicycle bicycle);
 

@@ -2,10 +2,7 @@ package com.vincenzo.bikehub.controller;
 
 import com.vincenzo.bikehub.mapper.BicycleMapper;
 import com.vincenzo.bikehub.server.gen.controller.BicycleApi;
-import com.vincenzo.bikehub.server.gen.model.CreateBicycleRequest;
-import com.vincenzo.bikehub.server.gen.model.CreateBicycleResponse;
-import com.vincenzo.bikehub.server.gen.model.RetrieveBicycleResponse;
-import com.vincenzo.bikehub.server.gen.model.UpdateBicycleRequest;
+import com.vincenzo.bikehub.server.gen.model.*;
 import com.vincenzo.bikehub.service.BicycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,14 +49,9 @@ public class BicycleController implements BicycleApi {
 
     @Override
     public ResponseEntity<RetrieveBicycleResponse> updateBicycle(UUID bicycleId, UpdateBicycleRequest updateBicycleRequest) {
-        return null;
+        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
+        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
+        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
+        return ResponseEntity.ok(response);
     }
-
-//    @Override
-//    public ResponseEntity<RetrieveBicycleResponse> updateBicycle(UUID bicycleId, UpdateBicycleRequest updateBicycleRequest) {
-//        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
-//        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
-//        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
-//        return ResponseEntity.ok(response);
-//    }
 }

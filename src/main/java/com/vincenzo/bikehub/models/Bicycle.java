@@ -1,7 +1,7 @@
 package com.vincenzo.bikehub.models;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
+import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class Bicycle {
 
     private String chassisId;
 
-    private BicycleStatus status = BicycleStatus.AVAILABLE;
+    private BicycleStatus status;
 
     private String brand;
 

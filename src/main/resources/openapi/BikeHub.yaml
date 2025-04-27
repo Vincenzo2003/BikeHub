@@ -174,7 +174,7 @@ paths:
               $ref: '#/components/schemas/CreateEquipmentRequest'
       responses:
         '201':
-          description: Bicycle successfully added.
+          description: Equipment successfully created.
           content:
             application/json:
               schema:
@@ -510,8 +510,6 @@ components:
           items:
             $ref: '#/components/schemas/BicycleCategory'
           uniqueItems: true
-        chassisId:
-          type: string
         status:
           $ref: '#/components/schemas/BicycleStatus'
         brand:

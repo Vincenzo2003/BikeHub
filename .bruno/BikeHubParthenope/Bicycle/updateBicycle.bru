@@ -5,13 +5,21 @@ meta {
 }
 
 patch {
-  url: {{baseUrl}}/bicycle/7266cc5c-fcc0-4cd5-9bd8-bbc9c2839579
+  url: {{baseUrl}}/bicycle/:id
   body: json
   auth: none
 }
 
+params:path {
+  id: ece6133f-3367-40a8-9e24-1b6bf0a9ecdc
+}
+
 body:json {
   {
-    "hourlyPrice": 10
+    "hourlyPrice": 12,
+    "chassisId": "ok",
+    "status": "AVAILABLE",
+    "brand": "ok",
+    "model": "ok"
   }
 }

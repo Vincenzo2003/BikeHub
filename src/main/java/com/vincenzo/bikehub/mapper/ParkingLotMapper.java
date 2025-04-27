@@ -1,9 +1,9 @@
 package com.vincenzo.bikehub.mapper;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.enums.EquipmentType;
 import com.vincenzo.bikehub.models.*;
 import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
+import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import org.mapstruct.*;
 
 

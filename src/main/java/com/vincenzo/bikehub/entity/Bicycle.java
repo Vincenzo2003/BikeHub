@@ -1,7 +1,7 @@
 package com.vincenzo.bikehub.entity;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
+import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class Bicycle {
     @ElementCollection(targetClass = BicycleCategory.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "categories")
-    private Set<BicycleCategory> categories = new HashSet<>(); // Initialize to avoid NullPointerException
+    private Set<BicycleCategory> categories = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Equipment> equipments;

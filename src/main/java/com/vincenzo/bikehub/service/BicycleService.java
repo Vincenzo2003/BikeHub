@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.service;
 
-import com.vincenzo.bikehub.enums.BicycleStatus;
 import com.vincenzo.bikehub.exceptions.BicycleChassisIdAlreadyRegisteredException;
 import com.vincenzo.bikehub.exceptions.BicycleDeletingException;
 import com.vincenzo.bikehub.exceptions.BicycleNotFoundException;
@@ -8,6 +7,7 @@ import com.vincenzo.bikehub.exceptions.BicycleSavingException;
 import com.vincenzo.bikehub.mapper.BicycleMapper;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.BicycleRepository;
+import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class BicycleService {
         bicycleEntity.setCurrentParkingLot(parkingLotService.getParkingLotEntity(bicycle.getCurrentParkingLotName()));
         bicycleEntity.setCategories(bicycle.getCategories());
         bicycleEntity.setChassisId(bicycle.getChassisId());
-        bicycleEntity.setStatus(bicycle.getStatus());
+        bicycleEntity.setStatus(BicycleStatus.AVAILABLE);
         bicycleEntity.setBrand(bicycle.getBrand());
         bicycleEntity.setModel(bicycle.getModel());
         bicycleEntity.setTotalRentTime(bicycle.getTotalRentTime());
@@ -87,14 +87,31 @@ public class BicycleService {
     @Transactional
     public Bicycle updateBicycle(UUID bicycleId, Bicycle bicycle) {
         com.vincenzo.bikehub.entity.Bicycle existingBicycle =
-                bicycleRepository.findByIdWithPessimisticLock(bicycleId)
-                        .orElseThrow(BicycleNotFoundException::new);
+            getBicycleEntity(bicycleId);
 
         if (existingBicycle.getStatus() == BicycleStatus.RENTED) {
             throw new IllegalStateException("Cannot update a rented bicycle");
         }
 
-//        bicycleMapper.updateEntityFromModel(bicycle, existingBicycle);
+        if (bicycle.getCurrentParkingLotName() != null) {
+            existingBicycle.setCurrentParkingLot(parkingLotService.getParkingLotEntity(bicycle.getCurrentParkingLotName()));
+        }
+        if (!bicycle.getCategories().isEmpty()) {
+            existingBicycle.setCategories(bicycle.getCategories());
+        }
+        if (bicycle.getBrand() != null) {
+            existingBicycle.setBrand(bicycle.getBrand());
+        }
+        if (bicycle.getModel() != null) {
+            existingBicycle.setModel(bicycle.getModel());
+        }
+        if (bicycle.getHourlyPrice() != null) {
+            existingBicycle.setHourlyPrice(bicycle.getHourlyPrice());
+        }
+        if (bicycle.getStatus() != null) {
+            existingBicycle.setStatus(bicycle.getStatus());
+        }
+
         com.vincenzo.bikehub.entity.Bicycle savedBicycle;
         try {
             savedBicycle = bicycleRepository.saveAndFlush(existingBicycle);
