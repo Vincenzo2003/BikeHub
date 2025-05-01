@@ -1,6 +1,7 @@
 package com.vincenzo.bikehub.controller;
 
 import com.vincenzo.bikehub.mapper.BicycleMapper;
+import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.server.gen.controller.BicycleApi;
 import com.vincenzo.bikehub.server.gen.model.*;
 import com.vincenzo.bikehub.service.BicycleService;
@@ -27,10 +28,10 @@ public class BicycleController implements BicycleApi {
     }
 
     @Override
-    public ResponseEntity<CreateBicycleResponse> createBicycle(CreateBicycleRequest createBicycleRequest) {
-        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.createBicycleRequestToModel(createBicycleRequest);
-        com.vincenzo.bikehub.models.Bicycle createdBicycleModel = bicycleService.createBicycle(serializedBicycleModel);
-        CreateBicycleResponse response = bicycleMapper.modelToCreateBicycleResponse(createdBicycleModel);
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> createBicycle(CreateBicycle createBicycleRequest) {
+        Bicycle serializedBicycleModel = bicycleMapper.createBicycleRequestToModel(createBicycleRequest);
+        Bicycle createdBicycleModel = bicycleService.createBicycle(serializedBicycleModel);
+        com.vincenzo.bikehub.server.gen.model.Bicycle response = bicycleMapper.modelToBicycle(createdBicycleModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -41,17 +42,17 @@ public class BicycleController implements BicycleApi {
     }
 
     @Override
-    public ResponseEntity<RetrieveBicycleResponse> retrieveBicycle(UUID bicycleId) {
-        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.getBicycleModel(bicycleId);
-        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> retrieveBicycle(UUID bicycleId) {
+        Bicycle bicycle = bicycleService.getBicycleModel(bicycleId);
+        com.vincenzo.bikehub.server.gen.model.Bicycle response = bicycleMapper.modelToBicycle(bicycle);
         return ResponseEntity.ok(response);
     }
 
     @Override
-    public ResponseEntity<RetrieveBicycleResponse> updateBicycle(UUID bicycleId, UpdateBicycleRequest updateBicycleRequest) {
-        com.vincenzo.bikehub.models.Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
-        com.vincenzo.bikehub.models.Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
-        RetrieveBicycleResponse response = bicycleMapper.modelToRetrieveBicycleResponse(bicycle);
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> updateBicycle(UUID bicycleId, UpdateBicycle updateBicycleRequest) {
+        Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
+        Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
+        com.vincenzo.bikehub.server.gen.model.Bicycle response = bicycleMapper.modelToBicycle(bicycle);
         return ResponseEntity.ok(response);
     }
 }

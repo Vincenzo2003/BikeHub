@@ -2,8 +2,7 @@ package com.vincenzo.bikehub.mapper;
 
 import com.vincenzo.bikehub.enums.EquipmentType;
 import com.vincenzo.bikehub.models.Equipment;
-import com.vincenzo.bikehub.server.gen.model.CreateEquipment201Response;
-import com.vincenzo.bikehub.server.gen.model.CreateEquipmentRequest;
+import com.vincenzo.bikehub.server.gen.model.CreateEquipment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -22,7 +21,7 @@ public abstract class EquipmentMapper {
     public abstract Equipment entityToModel(com.vincenzo.bikehub.entity.Equipment equipment);
 
     @Mapping(target = "id", ignore = true)
-    public abstract Equipment createEquipmentRequestToModel(CreateEquipmentRequest createEquipmentRequest);
+    public abstract Equipment createEquipmentToModel(CreateEquipment createEquipmentRequest);
 
-    public abstract CreateEquipment201Response modelToCreateEquipment201Response(Equipment equipment);
+    public abstract com.vincenzo.bikehub.server.gen.model.Equipment modelToEquipment(Equipment equipment);
 }

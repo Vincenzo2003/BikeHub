@@ -12,9 +12,13 @@ post {
 
 body:json {
   {
-    "bicycleId": "90d8c7e3-cf33-47c1-83ee-6831d5982738",
+    "bicycleId": "{{bicycleId}}",
     "type": "HELMET",
     "name": "testhelmet",
     "description": "123"
   }
+}
+
+script:post-response {
+  bru.setVar("equipmentId", res.body.id);
 }

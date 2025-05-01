@@ -4,9 +4,8 @@ import com.vincenzo.bikehub.enums.AccountRole;
 import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.PaymentMethod;
 import com.vincenzo.bikehub.models.Rental;
-import com.vincenzo.bikehub.server.gen.model.LoginRequest;
-import com.vincenzo.bikehub.server.gen.model.SignUpRequest;
-import com.vincenzo.bikehub.server.gen.model.SignUpResponse;
+import com.vincenzo.bikehub.server.gen.model.Login;
+import com.vincenzo.bikehub.server.gen.model.SignUp;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
@@ -22,12 +21,7 @@ public abstract class AccountMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "rentals", ignore = true)
     @Mapping(target = "paymentMethods", ignore = true)
-    public abstract com.vincenzo.bikehub.entity.Account signUpRequestToEntity(SignUpRequest AccountSignUpData);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "rentals", ignore = true)
-    @Mapping(target = "paymentMethods", ignore = true)
-    public abstract Account signUpRequestToModel(SignUpRequest AccountSignUpData);
+    public abstract Account signUpRequestToModel(SignUp AccountSignUpData);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
@@ -35,7 +29,7 @@ public abstract class AccountMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "rentals", ignore = true)
-    public abstract Account loginRequestToModel(LoginRequest AccountSignUpData);
+    public abstract Account loginToModel(Login AccountSignUpData);
 
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "rentals", ignore = true)
@@ -123,6 +117,4 @@ public abstract class AccountMapper {
             mappedAccount.setRentals(mappedRentals);
         }
     }
-
-    public abstract SignUpResponse modelToApi(Account Account);
 }

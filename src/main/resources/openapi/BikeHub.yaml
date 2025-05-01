@@ -3,7 +3,7 @@ info:
   title: BikeHubParthenope
   version: "1.0"
 servers:
-  - url: https://api.server.test/v1
+  - url: http://localhost:8080
 paths:
   /auth/signUp:
     post:
@@ -17,14 +17,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SignUpRequest'
+              $ref: '#/components/schemas/SignUp'
       responses:
         '201':
           description: Registrazione avvenuta con successo.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignUpResponse'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -43,14 +47,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/Login'
       responses:
         '200':
           description: Autenticazione avvenuta con successo. Restituisce un token di accesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/AuthLogin'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -68,14 +72,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateBicycleRequest'
+              $ref: '#/components/schemas/CreateBicycle'
       responses:
         '201':
           description: Bicycle successfully added.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateBicycleResponse'
+                $ref: '#/components/schemas/Bicycle'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -101,7 +105,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveBicycleResponse'
+                $ref: '#/components/schemas/Bicycle'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -118,7 +122,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateBicycleRequest'
+              $ref: '#/components/schemas/UpdateBicycle'
       parameters:
         - in: path
           name: bicycleId
@@ -132,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveBicycleResponse'
+                $ref: '#/components/schemas/Bicycle'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -171,23 +175,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateEquipmentRequest'
+              $ref: '#/components/schemas/CreateEquipment'
       responses:
         '201':
           description: Equipment successfully created.
           content:
             application/json:
               schema:
-                properties:
-                  id:
-                    type: string
-                    format: uuid
+                $ref: '#/components/schemas/Equipment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /equipment/{equipmentId}:
     get:
       description: Retrieve equipment.
       operationId: retrieveEquipment
@@ -206,7 +208,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveEquipmentResponse'
+                $ref: '#/components/schemas/Equipment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -223,7 +225,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateEquipmentRequest'
+              $ref: '#/components/schemas/UpdateEquipment'
       parameters:
         - in: path
           name: equipmentId
@@ -237,7 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveEquipmentResponse'
+                $ref: '#/components/schemas/Equipment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -276,23 +278,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateRentalRequest'
+              $ref: '#/components/schemas/CreateRental'
       responses:
         '201':
-          description: Rental successfully added.
+          description: Rental successfully created.
           content:
             application/json:
               schema:
-                properties:
-                  id:
-                    type: string
-                    format: uuid
+                $ref: '#/components/schemas/Rental'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /rental/{rentalId}:
     get:
       description: Retrieve rental.
       operationId: retrieveRental
@@ -311,7 +311,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveRentalResponse'
+                $ref: '#/components/schemas/Rental'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -328,7 +328,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateRentalRequest'
+              $ref: '#/components/schemas/UpdateRental'
       parameters:
         - in: path
           name: rentalId
@@ -342,7 +342,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RetrieveRentalResponse'
+                $ref: '#/components/schemas/Rental'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -370,156 +370,168 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
-
+  /rental/{rentalId}/pickup:
+    put:
+      description: Start a rental.
+      operationId: pickupRental
+      tags:
+        - Rental
+      parameters:
+        - in: path
+          name: rentalId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Rental successfully started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rental'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /rental/{rentalId}/return:
+    put:
+      description: Finish a rental.
+      operationId: returnRental
+      tags:
+        - Rental
+      requestBody:
+        description: Dettagli per la riconsegna (parcheggio di restituzione)
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rental'
+      parameters:
+        - in: path
+          name: rentalId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Rental successfully returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rental'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 
 components:
   schemas:
-    UpdateRentalRequest:
+    ErrorResponse:
       type: object
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
       properties:
-        returnParkingLot:
-          type: string
-          format: uuid
-          nullable: true
-        bicycle:
-          type: string
-          format: uuid
-        startedAt:
+        timestamp:
           type: string
           format: date-time
-          nullable: true
-        finishedAt:
-          type: string
-          format: date-time
-          nullable: true
-        totalPrice:
-          type: number
-          format: float
-        mileage:
-          type: number
-          format: float
-    RetrieveRentalResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        pickUpParkingLot:
-          type: string
-          format: uuid
-        returnParkingLot:
-          type: string
-          format: uuid
-          nullable: true
-        bicycle:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        startedAt:
-          type: string
-          format: date-time
-          nullable: true
-        finishedAt:
-          type: string
-          format: date-time
-          nullable: true
-        totalPrice:
-          type: number
-          format: float
+          description: Error timestamp (ISO 8601).
         status:
-          $ref: '#/components/schemas/RentalStatus'
-        mileage:
-          type: number
-          format: float
-    CreateRentalRequest:
-      type: object
-      properties:
-        pickUpParkingLot:
+          type: integer
+          format: int32
+          description: HTTP status code (es. 400, 401, 500).
+        error:
           type: string
-          format: uuid
-        returnParkingLot:
+          description: Error name (es. "BadRequest", "Unauthorized").
+        message:
           type: string
-          format: uuid
-          nullable: true
-        bicycle:
+          description: Detailed message.
+        path:
           type: string
-          format: uuid
-    UpdateEquipmentRequest:
-      type: object
-      properties:
-        bicycleId:
-          type: string
-          format: uuid
-          nullable: true
-        type:
-          $ref: '#/components/schemas/EquipmentType'
-        name:
-          type: string
-        description:
-          type: string
-        imageUrl:
-          type: string
-          nullable: true
-    RetrieveEquipmentResponse:
+          description: Endpoint path that generated the error.
+    SignUp:
       type: object
       required:
-        - type
-        - name
-        - description
+        - username
+        - password
+        - email
       properties:
-        bicycleId:
+        email:
           type: string
-          format: uuid
-        type:
-          $ref: '#/components/schemas/EquipmentType'
-        name:
+          format: email
+          x-field-extra-annotation: "@NotBlank"
+        password:
           type: string
-        description:
+        phoneNumber:
           type: string
-        imageUrl:
+        username:
           type: string
-    CreateEquipmentRequest:
+          maxLength: 32
+          minLength: 3
+        role:
+          $ref: '#/components/schemas/AccountRole'
+    Login:
       type: object
       required:
-        - type
-        - name
-        - description
+        - username
+        - password
       properties:
-        bicycleId:
+        username:
           type: string
-          format: uuid
-        type:
-          $ref: '#/components/schemas/EquipmentType'
-        name:
+        password:
           type: string
-        description:
-          type: string
-        imageUrl:
-          type: string
-          nullable: true
-    UpdateBicycleRequest:
+    AuthLogin:
       type: object
+      required:
+        - accessToken
+        - tokenType
+      properties:
+        accessToken:
+          type: string
+        tokenType:
+          type: string
+          default: Bearer
+    CreateBicycle:
+      type: object
+      required:
+        - currentParkingLotName
+        - categories
+        - chassisId
+        - brand
+        - model
+        - hourlyPrice
       properties:
         currentParkingLotName:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         categories:
           type: array
           items:
             $ref: '#/components/schemas/BicycleCategory'
           uniqueItems: true
-        status:
-          $ref: '#/components/schemas/BicycleStatus'
+        chassisId:
+          type: string
+          x-field-extra-annotation: "@NotBlank"
         brand:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         model:
           type: string
+          x-field-extra-annotation: "@NotBlank"
         hourlyPrice:
           type: number
           format: float
-    RetrieveBicycleResponse:
+    Bicycle:
       type: object
       required:
         - currentParkingLotName
@@ -559,110 +571,136 @@ components:
         registeredAt:
           type: string
           format: date-time
-    CreateBicycleRequest:
+    UpdateBicycle:
       type: object
-      required:
-        - currentParkingLotName
-        - categories
-        - chassisId
-        - brand
-        - model
-        - hourlyPrice
       properties:
         currentParkingLotName:
           type: string
-          x-field-extra-annotation: "@NotBlank"
         categories:
           type: array
           items:
             $ref: '#/components/schemas/BicycleCategory'
           uniqueItems: true
-        chassisId:
-          type: string
-          x-field-extra-annotation: "@NotBlank"
+        status:
+          $ref: '#/components/schemas/BicycleStatus'
         brand:
           type: string
-          x-field-extra-annotation: "@NotBlank"
         model:
           type: string
-          x-field-extra-annotation: "@NotBlank"
         hourlyPrice:
           type: number
           format: float
-    CreateBicycleResponse:
+    CreateEquipment:
+      type: object
+      required:
+        - type
+        - name
+        - description
+      properties:
+        bicycleId:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/EquipmentType'
+        name:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+    Equipment:
+      type: object
+      required:
+        - type
+        - name
+        - description
+      properties:
+        bicycleId:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/EquipmentType'
+        name:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+    UpdateEquipment:
+      type: object
+      properties:
+        bicycleId:
+          type: string
+          format: uuid
+          nullable: true
+        type:
+          $ref: '#/components/schemas/EquipmentType'
+        name:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+          nullable: true
+    CreateRental:
+      type: object
+      required:
+        - bicycleId
+        - requestedPickupTime
+      properties:
+        bicycleId:
+          type: string
+        requestedPickupTime:
+          type: string
+          format: date-time
+    Rental:
       type: object
       required:
         - id
-        - chassisId
+        - bicycleId
+        - pickUpParkingLotName
+        - status
+        - createdAt
       properties:
         id:
           type: string
           format: uuid
-        chassisId:
+        bicycleId:
           type: string
-    SignUpRequest:
-      type: object
-      required:
-        - username
-        - password
-        - email
-      properties:
-        email:
+        pickUpParkingLotName:
           type: string
-          format: email
-          x-field-extra-annotation: "@NotBlank"
-          description: Account's email
-        password:
+        returnParkingLotName:
           type: string
-          description: Account's password
-        phoneNumber:
+        status:
+          $ref: '#/components/schemas/RentalStatus'
+        createdAt:
           type: string
-          description: Account's phone number
-        username:
+          format: date-time
+        startedAt:
           type: string
-          maxLength: 32
-          minLength: 3
-          description: Account's username
-        name:
+          format: date-time
+        finishedAt:
           type: string
-          description: Account's name
-        surname:
-          type: string
-          description: Account's surname
-        role:
-          $ref: '#/components/schemas/AccountRole'
-          description: Account's role
-    SignUpResponse:
+          format: date-time
+        totalPrice:
+          type: number
+          format: float
+        mileage:
+          type: number
+          format: float
+    UpdateRental:
       type: object
       properties:
-        id:
+        returnParkingLotName:
           type: string
-          format: uuid
-    LoginRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          description: Account's username
-        password:
-          type: string
-          description: Account's password
-    LoginResponse:
-      type: object
-      required:
-        - accessToken
-        - tokenType
-      properties:
-        accessToken:
-          type: string
-          description: Token di accesso JWT da utilizzare per le successive chiamate autenticate.
-        tokenType:
-          type: string
-          default: Bearer
-          description: Tipo di token (Bearer).
+        status:
+          $ref: '#/components/schemas/RentalStatus'
+        totalPrice:
+          type: number
+          format: float
+        mileage:
+          type: number
+          format: float
     BicycleCategory:
       type: string
       enum:
@@ -695,47 +733,21 @@ components:
         - CREATED
         - IN_PROGRESS
         - FINISHED
-    ErrorResponse:
-      type: object
-      required:
-        - timestamp
-        - status
-        - error
-        - message
-        - path
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: Timestamp dell'errore (ISO 8601).
-        status:
-          type: integer
-          format: int32
-          description: Codice di stato HTTP dell'errore (es. 400, 401, 500).
-        error:
-          type: string
-          description: Nome simbolico dell'errore (es. "BadRequest", "Unauthorized").
-        message:
-          type: string
-          description: Messaggio di errore dettagliato per il client.
-        path:
-          type: string
-          description: Path dell'endpoint API chiamato che ha generato l'errore.
   responses:
     BadRequest:
-      description: Richiesta non valida (es. dati mancanti o in formato errato).
+      description: Invalid request.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
-      description: Autenticazione fallita o non fornita (credenziali non valide, token mancante o scaduto).
+      description: Authentication failed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
     InternalServerError:
-      description: Errore interno del server.
+      description: Server error.
       content:
         application/json:
           schema:

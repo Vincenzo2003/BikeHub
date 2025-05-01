@@ -12,8 +12,11 @@ post {
 
 body:json {
   {
-    "pickUpParkingLot": "",
-    "returnParkingLot": "",
-    "bicycle": ""
+    "returnParkingLotName": "TestParkingLot",
+    "bicycleId": "{{bicycleId}}"
   }
+}
+
+script:post-response {
+  bru.setVar("rentalId", res.body.id);
 }

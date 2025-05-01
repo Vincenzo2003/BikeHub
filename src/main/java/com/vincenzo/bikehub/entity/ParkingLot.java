@@ -23,7 +23,7 @@ public class ParkingLot {
     @Column(nullable = false)
     private String address;
 
-    @OneToMany
+    @OneToMany(mappedBy = "currentParkingLot", cascade = {CascadeType.PERSIST})
     private List<Bicycle> parkedBicycles;
 
     @Transient

@@ -34,9 +34,7 @@ public class BicycleService {
     }
 
     public Bicycle getBicycleModel(UUID bicycleId) {
-        com.vincenzo.bikehub.entity.Bicycle bicycleEntity =
-            bicycleRepository.findById(bicycleId)
-                .orElseThrow(BicycleNotFoundException::new);
+        com.vincenzo.bikehub.entity.Bicycle bicycleEntity = getBicycleEntity(bicycleId);
         return bicycleMapper.entityToModel(bicycleEntity);
     }
 
@@ -120,5 +118,20 @@ public class BicycleService {
         }
 
         return bicycleMapper.entityToModel(savedBicycle);
+    }
+
+    @Transactional
+    public void setBicycleStatus(UUID bicycleId, BicycleStatus status) {
+        com.vincenzo.bikehub.entity.Bicycle existingBicycle =
+            getBicycleEntity(bicycleId);
+        if (status == BicycleStatus.RENTED){
+            existingBicycle.setCurrentParkingLot(null);
+        }
+        existingBicycle.setStatus(status);
+        try {
+            bicycleRepository.saveAndFlush(existingBicycle);
+        } catch (DataIntegrityViolationException exc) {
+            throw new BicycleSavingException();
+        }
     }
 }

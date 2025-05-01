@@ -60,6 +60,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(RentalNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleRentalNotFoundException(RentalNotFoundException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(RentalSavingException.class)
+    public ResponseEntity<ExceptionResponse> handleRentalSavingException(RentalSavingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(EquipmentSavingException.class)
     public ResponseEntity<ExceptionResponse> handleEquipmentSavingException(EquipmentSavingException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);

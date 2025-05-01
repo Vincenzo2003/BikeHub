@@ -1,6 +1,7 @@
 package com.vincenzo.bikehub.controller;
 
 import com.vincenzo.bikehub.mapper.EquipmentMapper;
+import com.vincenzo.bikehub.models.Equipment;
 import com.vincenzo.bikehub.server.gen.controller.EquipmentApi;
 import com.vincenzo.bikehub.server.gen.model.*;
 import com.vincenzo.bikehub.service.EquipmentService;
@@ -27,10 +28,10 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
-    public ResponseEntity<CreateEquipment201Response> createEquipment(CreateEquipmentRequest createEquipmentRequest) {
-        com.vincenzo.bikehub.models.Equipment serializedEquipmentModel = equipmentMapper.createEquipmentRequestToModel(createEquipmentRequest);
-        com.vincenzo.bikehub.models.Equipment createdEquipmentModel = equipmentService.createEquipment(serializedEquipmentModel);
-        CreateEquipment201Response response = equipmentMapper.modelToCreateEquipment201Response(createdEquipmentModel);
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> createEquipment(CreateEquipment createEquipmentRequest) {
+        Equipment serializedEquipmentModel = equipmentMapper.createEquipmentToModel(createEquipmentRequest);
+        Equipment createdEquipmentModel = equipmentService.createEquipment(serializedEquipmentModel);
+        com.vincenzo.bikehub.server.gen.model.Equipment response = equipmentMapper.modelToEquipment(createdEquipmentModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -40,12 +41,13 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
-    public ResponseEntity<RetrieveEquipmentResponse> retrieveEquipment(UUID equipmentId) {
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> retrieveEquipment(UUID equipmentId) {
         return null;
     }
 
     @Override
-    public ResponseEntity<RetrieveEquipmentResponse> updateEquipment(UUID equipmentId, UpdateEquipmentRequest updateEquipmentRequest) {
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> updateEquipment(UUID equipmentId, UpdateEquipment updateEquipment) {
         return null;
     }
+
 }

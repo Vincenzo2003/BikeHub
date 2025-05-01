@@ -1,6 +1,6 @@
 package com.vincenzo.bikehub.models;
 
-import com.vincenzo.bikehub.enums.RentalStatus;
+import com.vincenzo.bikehub.server.gen.model.RentalStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +16,16 @@ public class Rental {
 
     private UUID id;
 
+    private UUID bicycleId;
+
+    private String pickUpParkingLotName;
+
+    private String returnParkingLotName;
+
+    private UUID paymentMethodId;
+
+    private RentalStatus status;
+
     private Instant createdAt;
 
     private Instant startedAt;
@@ -24,5 +34,6 @@ public class Rental {
 
     private Float totalPrice;
 
-    private RentalStatus status;
+    private Float mileage;
+
 }

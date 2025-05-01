@@ -1,17 +1,19 @@
 package com.vincenzo.bikehub.entity;
 
-import com.vincenzo.bikehub.enums.RentalStatus;
+import com.vincenzo.bikehub.server.gen.model.RentalStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.UUID;
 
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
 @Setter
@@ -22,14 +24,20 @@ public class Rental{
     @Column(columnDefinition = "UUID")
     private UUID id;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
+    private Bicycle bicycle;
+
+    @ManyToOne
+    private PaymentMethod paymentMethod;
+
+    @ManyToOne
     private ParkingLot pickUpParkingLot;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     private ParkingLot returnParkingLot;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST})
-    private Bicycle bicycle;
+    @Column(nullable = false)
+    private RentalStatus status;
 
     @CreatedDate
     private Instant createdAt;
@@ -40,15 +48,10 @@ public class Rental{
     @Column
     private Instant finishedAt;
 
-    @Column(nullable = false)
+    @Column
     private Float totalPrice;
-
-    @Column(nullable = false)
-    private RentalStatus status;
 
     @Column
     private Float mileage;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
-    private PaymentMethod paymentMethod;
 }

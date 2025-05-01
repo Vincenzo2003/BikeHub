@@ -5,14 +5,12 @@ import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.server.gen.model.*;
 import org.mapstruct.*;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 @Mapper(
         componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.ERROR,
-        imports = {BicycleStatus.class, BicycleCategory.class, EquipmentType.class}
+        imports = {BicycleStatus.class, BicycleCategory.class, EquipmentType.class},
+        uses = {IDateTimeMapper.class}
 )
 public abstract class BicycleMapper {
 
@@ -21,34 +19,18 @@ public abstract class BicycleMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "equipmentsIds", ignore = true)
-    public abstract Bicycle createBicycleRequestToModel(CreateBicycleRequest createBicycleRequest);
+    public abstract Bicycle createBicycleRequestToModel(CreateBicycle createBicycleRequest);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "totalRentTime", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "equipmentsIds", ignore = true)
     @Mapping(target = "chassisId", ignore = true)
-    public abstract Bicycle updateBicycleRequestToModel(UpdateBicycleRequest updateBicycleRequest);
-
-    public abstract CreateBicycleResponse modelToCreateBicycleResponse(Bicycle bicycle);
-
-    protected OffsetDateTime mapInstantToOffsetDateTime(Instant instant) {
-        if (instant == null) {
-            return null;
-        }
-
-        return instant.atOffset(ZoneOffset.UTC);
-    }
+    public abstract Bicycle updateBicycleRequestToModel(UpdateBicycle updateBicycleRequest);
 
     @Mapping(target = "equipments", source = "bicycle.equipmentsIds")
-    @Mapping(target = "registeredAt", expression = "java(mapInstantToOffsetDateTime(bicycle.getRegisteredAt()))")
-    public abstract RetrieveBicycleResponse modelToRetrieveBicycleResponse(Bicycle bicycle);
+    public abstract com.vincenzo.bikehub.server.gen.model.Bicycle modelToBicycle(Bicycle bicycle);
 
-    @Mapping(target = "currentParkingLotName", ignore = true)
+    @Mapping(target = "currentParkingLotName", source = "currentParkingLot.name")
     public abstract Bicycle entityToModel(com.vincenzo.bikehub.entity.Bicycle bicycle);
-
-    @Mapping(target = "currentParkingLot", ignore = true)
-    @Mapping(target = "equipments", ignore = true)
-    public abstract com.vincenzo.bikehub.entity.Bicycle modelToEntity(Bicycle bicycle);
-
 }
