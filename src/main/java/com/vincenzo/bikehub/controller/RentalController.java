@@ -31,26 +31,10 @@ public class RentalController implements RentalApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteRental(UUID rentalId) {
-        rentalService.deleteRental(rentalId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @Override
-    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> pickupRental(UUID rentalId) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> retrieveRental(UUID rentalId) {
         Rental rental = rentalService.getRentalModel(rentalId);
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
         return ResponseEntity.ok(response);
-    }
-
-    @Override
-    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> returnRental(UUID rentalId, com.vincenzo.bikehub.server.gen.model.Rental rental) {
-        return null;
     }
 
     @Override
@@ -59,5 +43,25 @@ public class RentalController implements RentalApi {
         Rental rental = rentalService.updateRental(rentalId, serializedRentalModel);
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteRental(UUID rentalId) {
+        rentalService.deleteRental(rentalId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> pickupRental(UUID rentalId) {
+        Rental rental = rentalService.pickupRental(rentalId);
+        com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
+        return  ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> returnRental(UUID rentalId, ReturnRentalDetails returnRentalDetails) {
+        Rental rental = rentalService.returnRental(rentalId, returnRentalDetails.getReturnParkingLotName());
+        com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
+        return  ResponseEntity.ok(response);
     }
 }

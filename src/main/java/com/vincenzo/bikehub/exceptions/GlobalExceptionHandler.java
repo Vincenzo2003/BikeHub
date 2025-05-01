@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class GlobalExceptionHandler {
 
     private static ExceptionResponse mapCustomException(ResponseStatusException exception, HttpServletRequest request) {
         return new ExceptionResponse(
-                request.getRequestURI(), exception.getReason(), null, LocalDateTime.now()
+                request.getRequestURI(), exception.getReason(), null, Instant.now()
         );
     }
 
@@ -55,8 +56,14 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 exception.getBody().getDetail(),
                 details,
-                LocalDateTime.now()
+                Instant.now()
         );
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(BicycleNotAvailableException.class)
+    public ResponseEntity<ExceptionResponse> handleBicycleNotAvailableException(BicycleNotAvailableException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
@@ -137,7 +144,7 @@ public class GlobalExceptionHandler {
 
         private HashMap<String, Object> details;
 
-        private LocalDateTime timestamp;
+        private Instant timestamp;
 
     }
 

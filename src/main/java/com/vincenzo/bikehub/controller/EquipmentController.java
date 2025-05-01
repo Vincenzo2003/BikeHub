@@ -36,18 +36,23 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteEquipment(UUID equipmentId) {
-        return null;
-    }
-
-    @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> retrieveEquipment(UUID equipmentId) {
-        return null;
+        Equipment equipment = equipmentService.getEquipmentModel(equipmentId);
+        com.vincenzo.bikehub.server.gen.model.Equipment response = equipmentMapper.modelToEquipment(equipment);
+        return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> updateEquipment(UUID equipmentId, UpdateEquipment updateEquipment) {
-        return null;
+        Equipment serializedEquipmentModel = equipmentMapper.updateEquipmentToModel(updateEquipment);
+        Equipment updatedEquipmentModel = equipmentService.updateEquipment(equipmentId, serializedEquipmentModel);
+        com.vincenzo.bikehub.server.gen.model.Equipment response = equipmentMapper.modelToEquipment(updatedEquipmentModel);
+        return ResponseEntity.ok(response);
     }
 
+    @Override
+    public ResponseEntity<Void> deleteEquipment(UUID equipmentId) {
+        equipmentService.deleteEquipment(equipmentId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

@@ -3,6 +3,7 @@ package com.vincenzo.bikehub.mapper;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.server.gen.model.CreateRental;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
+import com.vincenzo.bikehub.server.gen.model.ReturnRentalDetails;
 import com.vincenzo.bikehub.server.gen.model.UpdateRental;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,7 +23,7 @@ public abstract class RentalMapper {
     @Mapping(target = "returnParkingLotName", ignore = true)
     @Mapping(target = "paymentMethodId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "startedAt", ignore = true)
+    @Mapping(target = "startedAt", source = "requestedPickupTime")
     @Mapping(target = "finishedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "totalPrice", ignore = true)

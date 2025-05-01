@@ -1,10 +1,10 @@
 package com.vincenzo.bikehub.service;
 
 
-import com.vincenzo.bikehub.entity.Bicycle;
 import com.vincenzo.bikehub.exceptions.*;
 import com.vincenzo.bikehub.mapper.RentalMapper;
 import com.vincenzo.bikehub.models.Rental;
+import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.RentalRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -29,20 +31,12 @@ public class RentalService {
         this.parkingLotService = parkingLotService;
     }
 
-    @Transactional
-    public Rental createRental(Rental rental){
-        UUID bicycleToRentId = rental.getBicycleId();
-        Bicycle bicycleToRentEntity = bicycleService.getBicycleEntity(bicycleToRentId);
-        if (bicycleToRentEntity.getStatus() != BicycleStatus.AVAILABLE) {
-            throw new IllegalStateException("Bicycle is not available for renting. Status: " + bicycleToRentEntity.getStatus());
-        }
+    private Rental saveRental(Rental rental){
         com.vincenzo.bikehub.entity.Rental rentalEntity = new com.vincenzo.bikehub.entity.Rental();
-        rentalEntity.setBicycle(bicycleToRentEntity);
-        bicycleService.setBicycleStatus(bicycleToRentId, BicycleStatus.RENTED);
-        rentalEntity.setPickUpParkingLot(bicycleToRentEntity.getCurrentParkingLot());
-        String returnParkingLotName = rental.getReturnParkingLotName();
-        if (returnParkingLotName != null) {
-            rentalEntity.setReturnParkingLot(parkingLotService.getParkingLotEntity(returnParkingLotName));
+        rentalEntity.setBicycle(bicycleService.getBicycleEntity(rental.getBicycleId()));
+        rentalEntity.setPickUpParkingLot(parkingLotService.getParkingLotEntity(rental.getPickUpParkingLotName()));
+        if (rental.getReturnParkingLotName() != null) {
+            rentalEntity.setReturnParkingLot(parkingLotService.getParkingLotEntity(rental.getReturnParkingLotName()));
         }
         rentalEntity.setStatus(RentalStatus.CREATED);
         try {
@@ -51,6 +45,25 @@ public class RentalService {
             throw new RentalSavingException();
         }
         return rentalMapper.entityToModel(rentalEntity);
+    }
+
+    @Transactional
+    public Rental createRental(Rental rental){
+        UUID bicycleToRentId = rental.getBicycleId();
+        Bicycle bicycleToRent = bicycleService.getBicycleModel(bicycleToRentId);
+        if (bicycleToRent.getStatus() != BicycleStatus.AVAILABLE) {
+            throw new BicycleNotAvailableException();
+        }
+        Rental rentalToSave = new Rental();
+        rentalToSave.setBicycleId(bicycleToRentId);
+        rentalToSave.setPickUpParkingLotName(bicycleToRent.getCurrentParkingLotName());
+        bicycleService.setBicycleStatus(bicycleToRentId, BicycleStatus.RENTED);
+        String returnParkingLotName = rental.getReturnParkingLotName();
+        if (returnParkingLotName != null) {
+            rentalToSave.setReturnParkingLotName(returnParkingLotName);
+        }
+        rentalToSave.setStatus(RentalStatus.CREATED);
+        return saveRental(rentalToSave);
     }
 
     public Rental getRentalModel(UUID rentalId) {
@@ -66,7 +79,7 @@ public class RentalService {
     public void setRentalStatus(UUID rentalId, RentalStatus status) {
         com.vincenzo.bikehub.entity.Rental rentalEntity = getRentalEntity(rentalId);
         if (status == RentalStatus.IN_PROGRESS){
-            rentalEntity.setPickUpParkingLot(bicycleService.getBicycleEntity(rentalEntity.getBicycle().getId()).getCurrentParkingLot());
+            rentalEntity.setPickUpParkingLot(rentalEntity.getBicycle().getCurrentParkingLot());
         }
         rentalEntity.setStatus(status);
         try {
@@ -88,6 +101,9 @@ public class RentalService {
         }
         if (rental.getMileage() != null){
             existingRental.setMileage(rental.getMileage());
+        }
+        if (rental.getFinishedAt() != null){
+            existingRental.setFinishedAt(rental.getFinishedAt());
         }
         com.vincenzo.bikehub.entity.Rental savedRental;
         try {
@@ -116,5 +132,50 @@ public class RentalService {
             throw new RentalDeletingException();
         }
 
+    }
+
+    public Rental pickupRental(UUID rentalId) {
+        com.vincenzo.bikehub.entity.Rental rental = getRentalEntity(rentalId);
+        if (rental.getStatus() != RentalStatus.CREATED) {
+            return rentalMapper.entityToModel(rental);
+        }
+        rental.setStatus(RentalStatus.IN_PROGRESS);
+        rental.setStartedAt(Instant.now());
+        try {
+            rentalRepository.saveAndFlush(rental);
+        } catch (DataIntegrityViolationException exc) {
+            throw new RentalSavingException();
+        }
+        return rentalMapper.entityToModel(rental);
+    }
+
+    private Float determinateRentalTotalPrice(Float hourlyPrice, Instant rentalStartedAt, Instant rentalFinishedAt) {
+        Long rentalHours = Duration.between(rentalStartedAt, rentalFinishedAt).toHours();
+        return hourlyPrice * rentalHours;
+    }
+
+    @Transactional
+    public Rental returnRental(UUID rentalId, String returnParkingLotName) {
+        Rental rental = getRentalModel(rentalId);
+        if (rental.getStatus() != RentalStatus.CREATED) {
+            return rental;
+        }
+        Rental rentalToUpdate = new Rental();
+        Bicycle rentedBicycleToUpdate = bicycleService.getBicycleModel(rental.getBicycleId());
+        if (returnParkingLotName != null) {
+            rentalToUpdate.setReturnParkingLotName(returnParkingLotName);
+            rentedBicycleToUpdate.setCurrentParkingLotName(returnParkingLotName);
+        }
+        Instant rentalFinishedAt = Instant.now();
+        rentalToUpdate.setFinishedAt(rentalFinishedAt);
+        Instant rentalStartedAt = rental.getStartedAt();
+        Float hourlyPrice = rentedBicycleToUpdate.getHourlyPrice();
+        Float randomMileage = (float) (Math.random() * 1000);
+        rentalToUpdate.setTotalPrice(determinateRentalTotalPrice(hourlyPrice, rentalStartedAt, rentalFinishedAt));
+        rentalToUpdate.setStatus(RentalStatus.FINISHED);
+        rentalToUpdate.setMileage(randomMileage);
+        rentedBicycleToUpdate.setStatus(BicycleStatus.AVAILABLE);
+        bicycleService.updateBicycle(rental.getBicycleId(), rentedBicycleToUpdate);
+        return updateRental(rentalId, rentalToUpdate);
     }
 }

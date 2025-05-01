@@ -15,4 +15,12 @@ public interface IDateTimeMapper {
         }
         return instant.atOffset(ZoneOffset.UTC);
     }
+
+    default Instant mapOffsetDateTimeToInstant(OffsetDateTime offsetDateTime) {
+        if (offsetDateTime == null) {
+            return null;
+        }
+        return offsetDateTime.toInstant();
+    }
+
 }

@@ -403,12 +403,11 @@ paths:
       tags:
         - Rental
       requestBody:
-        description: Dettagli per la riconsegna (parcheggio di restituzione)
         required: false
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Rental'
+              $ref: '#/components/schemas/ReturnRentalDetails'
       parameters:
         - in: path
           name: rentalId
@@ -534,6 +533,7 @@ components:
     Bicycle:
       type: object
       required:
+        - id
         - currentParkingLotName
         - chassisId
         - status
@@ -542,6 +542,9 @@ components:
         - hourlyPrice
         - registeredAt
       properties:
+        id:
+          type: string
+          format: uuid
         currentParkingLotName:
           type: string
         categories:
@@ -611,10 +614,14 @@ components:
     Equipment:
       type: object
       required:
+        - id
         - type
         - name
         - description
       properties:
+        id:
+          type: string
+          format: uuid
         bicycleId:
           type: string
           format: uuid
@@ -701,6 +708,11 @@ components:
         mileage:
           type: number
           format: float
+    ReturnRentalDetails:
+      type: object
+      properties:
+        returnParkingLotName:
+          type: string
     BicycleCategory:
       type: string
       enum:

@@ -5,11 +5,11 @@ meta {
 }
 
 delete {
-  url: {{baseUrl}}/equipment
+  url: {{baseUrl}}/equipment/:id
   body: none
   auth: none
 }
 
 params:path {
-  equipmentId: {{equipmentId}}
+  id: {{equipmentId}}
 }
