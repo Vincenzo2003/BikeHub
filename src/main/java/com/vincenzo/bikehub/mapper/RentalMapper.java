@@ -23,7 +23,7 @@ public abstract class RentalMapper {
     @Mapping(target = "returnParkingLotName", ignore = true)
     @Mapping(target = "paymentMethodId", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "startedAt", source = "requestedPickupTime")
+    @Mapping(target = "startedAt", ignore = true)
     @Mapping(target = "finishedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "totalPrice", ignore = true)

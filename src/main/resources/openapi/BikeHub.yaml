@@ -565,7 +565,7 @@ components:
           type: string
         model:
           type: string
-        totalRentTime:
+        totalRentTimeInSeconds:
           type: number
           format: float
         hourlyPrice:
@@ -639,7 +639,6 @@ components:
         bicycleId:
           type: string
           format: uuid
-          nullable: true
         type:
           $ref: '#/components/schemas/EquipmentType'
         name:
@@ -648,18 +647,13 @@ components:
           type: string
         imageUrl:
           type: string
-          nullable: true
     CreateRental:
       type: object
       required:
         - bicycleId
-        - requestedPickupTime
       properties:
         bicycleId:
           type: string
-        requestedPickupTime:
-          type: string
-          format: date-time
     Rental:
       type: object
       required:

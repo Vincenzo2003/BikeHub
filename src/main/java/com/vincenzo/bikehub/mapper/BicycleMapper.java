@@ -15,14 +15,14 @@ import org.mapstruct.*;
 public abstract class BicycleMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "totalRentTime", ignore = true)
+    @Mapping(target = "totalRentTimeInSeconds", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "equipmentsIds", ignore = true)
     public abstract Bicycle createBicycleRequestToModel(CreateBicycle createBicycleRequest);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "totalRentTime", ignore = true)
+    @Mapping(target = "totalRentTimeInSeconds", ignore = true)
     @Mapping(target = "registeredAt", ignore = true)
     @Mapping(target = "equipmentsIds", ignore = true)
     @Mapping(target = "chassisId", ignore = true)

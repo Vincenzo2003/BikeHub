@@ -72,7 +72,7 @@ public class BicycleService {
         bicycleEntity.setStatus(BicycleStatus.AVAILABLE);
         bicycleEntity.setBrand(bicycle.getBrand());
         bicycleEntity.setModel(bicycle.getModel());
-        bicycleEntity.setTotalRentTime(bicycle.getTotalRentTime());
+        bicycleEntity.setTotalRentTimeInSeconds(bicycle.getTotalRentTimeInSeconds());
         bicycleEntity.setHourlyPrice(bicycle.getHourlyPrice());
     try {
             bicycleEntity = bicycleRepository.saveAndFlush(bicycleEntity);
@@ -94,7 +94,7 @@ public class BicycleService {
         if (bicycle.getCurrentParkingLotName() != null) {
             existingBicycle.setCurrentParkingLot(parkingLotService.getParkingLotEntity(bicycle.getCurrentParkingLotName()));
         }
-        if (!bicycle.getCategories().isEmpty()) {
+        if (bicycle.getCategories() != null) {
             existingBicycle.setCategories(bicycle.getCategories());
         }
         if (bicycle.getBrand() != null) {

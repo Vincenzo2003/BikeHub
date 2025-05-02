@@ -54,7 +54,7 @@ public class Bicycle {
     private String model;
 
     @Column
-    private Float totalRentTime;
+    private Long totalRentTimeInSeconds = 0L;
 
     @Column(nullable = false)
     private Float hourlyPrice;

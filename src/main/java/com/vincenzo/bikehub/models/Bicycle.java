@@ -33,7 +33,7 @@ public class Bicycle {
 
     private String model;
 
-    private Float totalRentTime;
+    private Long totalRentTimeInSeconds = 0L;
 
     private Float hourlyPrice;
 

@@ -61,6 +61,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(RentalDeletingException.class)
+    public ResponseEntity<ExceptionResponse> handleRentalDeletingException(RentalDeletingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(BicycleNotAvailableException.class)
     public ResponseEntity<ExceptionResponse> handleBicycleNotAvailableException(BicycleNotAvailableException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);
