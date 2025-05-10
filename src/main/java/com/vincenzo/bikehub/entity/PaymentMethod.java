@@ -36,4 +36,7 @@ public class PaymentMethod {
     @Column
     private Date expire_at;
 
+    @Column
+    private boolean defaultPaymentMethod;
+
 }

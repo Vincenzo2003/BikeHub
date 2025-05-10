@@ -2,6 +2,10 @@ spring:
   application:
     name: bikehub
     secret: MjU0Nzg4N2JlNWVhZWM5Yzk1NTg0ZmI4OTJlNWNhOGQzOGI4NWU0MjY1YmFiYjljN2M3ZjdiNTI1NmUwZDYzNQ==
+  security:
+    user:
+      name: user
+      password: password
   sql:
     init:
       mode: always

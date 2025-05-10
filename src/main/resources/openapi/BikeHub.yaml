@@ -441,23 +441,18 @@ components:
         - message
         - path
       properties:
+        apiPath:
+          type: string
+          description: Endpoint path that generated the error.
+        message:
+          type: string
+          description: Detailed message.
+        details:
+          type: object
         timestamp:
           type: string
           format: date-time
           description: Error timestamp (ISO 8601).
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code (es. 400, 401, 500).
-        error:
-          type: string
-          description: Error name (es. "BadRequest", "Unauthorized").
-        message:
-          type: string
-          description: Detailed message.
-        path:
-          type: string
-          description: Endpoint path that generated the error.
     SignUp:
       type: object
       required:
@@ -739,6 +734,7 @@ components:
         - CREATED
         - IN_PROGRESS
         - FINISHED
+        - PAYED
   responses:
     BadRequest:
       description: Invalid request.

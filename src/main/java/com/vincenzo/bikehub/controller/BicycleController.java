@@ -8,6 +8,7 @@ import com.vincenzo.bikehub.service.BicycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -36,6 +37,7 @@ public class BicycleController implements BicycleApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBicycle(UUID bicycleId) {
         bicycleService.deleteBicycle(bicycleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -49,6 +51,7 @@ public class BicycleController implements BicycleApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> updateBicycle(UUID bicycleId, UpdateBicycle updateBicycleRequest) {
         Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
         Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);

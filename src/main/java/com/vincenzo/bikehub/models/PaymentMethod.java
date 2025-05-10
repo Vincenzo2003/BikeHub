@@ -25,4 +25,6 @@ public class PaymentMethod {
 
     private Date expire_at;
 
+    private boolean defaultPaymentMethod;
+
 }

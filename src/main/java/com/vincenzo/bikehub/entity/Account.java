@@ -39,7 +39,7 @@ public class Account {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PaymentMethod> paymentMethods;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.PERSIST})
     private List<Rental> rentals;
 
 }

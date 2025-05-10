@@ -41,11 +41,25 @@ public class JwtManager {
                 .compact();
     }
 
-    public Claims validateToken(String token) throws JwtException {
-        return Jwts.parser()
+    public String getUsername(String token) throws JwtException {
+        Claims claims = Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+        return claims.getSubject();
+    }
+
+    public Boolean validateToken(String token) throws JwtException {
+        try {
+            Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (JwtException e) {
+            return false;
+        }
+        return true;
     }
 }

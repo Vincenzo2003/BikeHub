@@ -20,5 +20,7 @@ body:json {
 }
 
 script:post-response {
-  bru.setVar("equipmentId", res.body.id);
+  if(res.body.id){
+    bru.setVar("equipmentId", res.body.id);
+  }
 }

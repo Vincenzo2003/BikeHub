@@ -72,7 +72,7 @@ public class RentalService {
         return saveRental(rentalToSave);
     }
 
-    public Rental getRentalModel(UUID rentalId) {
+    public Rental getRental(UUID rentalId) {
         com.vincenzo.bikehub.entity.Rental rentalEntity = getRentalEntity(rentalId);
         return rentalMapper.entityToModel(rentalEntity);
     }
@@ -154,7 +154,7 @@ public class RentalService {
 
     @Transactional
     public Rental returnRental(UUID rentalId, String returnParkingLotName) {
-        Rental rental = getRentalModel(rentalId);
+        Rental rental = getRental(rentalId);
         if (rental.getStatus() != RentalStatus.IN_PROGRESS) {
             return rental;
         }

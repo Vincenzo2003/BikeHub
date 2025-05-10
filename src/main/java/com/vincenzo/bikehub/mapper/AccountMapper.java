@@ -23,14 +23,6 @@ public abstract class AccountMapper {
     @Mapping(target = "paymentMethods", ignore = true)
     public abstract Account signUpRequestToModel(SignUp AccountSignUpData);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "email", ignore = true)
-    @Mapping(target = "phoneNumber", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "paymentMethods", ignore = true)
-    @Mapping(target = "rentals", ignore = true)
-    public abstract Account loginToModel(Login AccountSignUpData);
-
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "rentals", ignore = true)
     public abstract com.vincenzo.bikehub.entity.Account modelToEntity(Account Account);

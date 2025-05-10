@@ -1,5 +1,6 @@
 package com.vincenzo.bikehub.exceptions;
 
+import com.vincenzo.bikehub.models.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +58,12 @@ public class GlobalExceptionHandler {
                 details,
                 Instant.now()
         );
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCredentialsException(InvalidCredentialsException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
@@ -138,20 +144,6 @@ public class GlobalExceptionHandler {
     private final static class ValidationError {
         private String fieldName;
         private List<String> errors;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static final class ExceptionResponse {
-
-        private String apiPath;
-
-        private String message;
-
-        private HashMap<String, Object> details;
-
-        private Instant timestamp;
-
     }
 
 }

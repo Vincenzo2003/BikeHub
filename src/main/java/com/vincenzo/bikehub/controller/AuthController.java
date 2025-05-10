@@ -26,8 +26,7 @@ public class AuthController implements AuthApi {
 
     @Override
     public ResponseEntity<AuthLogin> login(Login loginRequest) {
-        Account accountModel = accountMapper.loginToModel(loginRequest);
-        String accessToken = authService.authenticate(accountModel);
+        String accessToken = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         AuthLogin response = new AuthLogin();
         response.setAccessToken(accessToken);
         return ResponseEntity.ok(response);

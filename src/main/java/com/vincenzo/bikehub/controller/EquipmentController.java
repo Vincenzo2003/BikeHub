@@ -8,6 +8,7 @@ import com.vincenzo.bikehub.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> createEquipment(CreateEquipment createEquipmentRequest) {
         Equipment serializedEquipmentModel = equipmentMapper.createEquipmentToModel(createEquipmentRequest);
         Equipment createdEquipmentModel = equipmentService.createEquipment(serializedEquipmentModel);
@@ -36,6 +38,7 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> retrieveEquipment(UUID equipmentId) {
         Equipment equipment = equipmentService.getEquipmentModel(equipmentId);
         com.vincenzo.bikehub.server.gen.model.Equipment response = equipmentMapper.modelToEquipment(equipment);
@@ -43,6 +46,7 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Equipment> updateEquipment(UUID equipmentId, UpdateEquipment updateEquipment) {
         Equipment serializedEquipmentModel = equipmentMapper.updateEquipmentToModel(updateEquipment);
         Equipment updatedEquipmentModel = equipmentService.updateEquipment(equipmentId, serializedEquipmentModel);
@@ -51,6 +55,7 @@ public class EquipmentController implements EquipmentApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteEquipment(UUID equipmentId) {
         equipmentService.deleteEquipment(equipmentId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
