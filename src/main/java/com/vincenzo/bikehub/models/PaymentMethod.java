@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.models;
 
-import com.vincenzo.bikehub.enums.PaymentType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,10 +20,10 @@ public class PaymentMethod {
 
     private String holder;
 
-    private PaymentType type;
+    private com.vincenzo.bikehub.server.gen.model.PaymentType type;
 
-    private Date expire_at;
+    private Date expireAt;
 
-    private boolean defaultPaymentMethod;
+    private UUID accountId;
 
 }

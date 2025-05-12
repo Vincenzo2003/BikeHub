@@ -428,6 +428,162 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /rental/{rentalId}/pay:
+    put:
+      description: Pay a rental.
+      operationId: payRental
+      tags:
+        - Rental
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayRental'
+      parameters:
+        - in: path
+          name: rentalId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Rental successfully payed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rental'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payment:
+    post:
+      description: Create a payment Method.
+      operationId: createPaymentMethod
+      tags:
+        - Payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMethod'
+      responses:
+        '201':
+          description: Payment Method successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payment/{paymentMethodId}:
+    get:
+      description: Retrieve a payment method.
+      operationId: retrievePaymentMethod
+      tags:
+        - Payment
+      parameters:
+        - in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment method successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      description: Update payment method.
+      operationId: updatePaymentMethod
+      tags:
+        - Payment Method
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentMethod'
+      parameters:
+        - in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment method successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      description: Delete payment method.
+      operationId: deletePaymentMethod
+      tags:
+        - Payment Method
+      parameters:
+        - in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Payment method successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /payment/list:
+    get:
+      description: Retrieve payment methods.
+      operationId: retrievePaymentMethods
+      tags:
+        - Payment
+      responses:
+        '200':
+          description: Payment method successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 
 components:
@@ -702,6 +858,62 @@ components:
       properties:
         returnParkingLotName:
           type: string
+    PayRental:
+      type: object
+      properties:
+        paymentType:
+          $ref: '#/components/schemas/PaymentType'
+    CreatePaymentMethod:
+      type: object
+      required:
+        - type
+        - cc
+        - cvc
+        - holder
+        - expireAt
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        cc:
+          type: string
+        cvc:
+          type: string
+        holder:
+          type: string
+        expireAt:
+          type: string
+          format: date
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        cc:
+          type: string
+        cvc:
+          type: string
+        holder:
+          type: string
+        expireAt:
+          type: string
+          format: date
+    UpdatePaymentMethod:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentType'
+        cc:
+          type: string
+        cvc:
+          type: string
+        holder:
+          type: string
+        expireAt:
+          type: string
+          format: date
     BicycleCategory:
       type: string
       enum:
@@ -735,6 +947,12 @@ components:
         - IN_PROGRESS
         - FINISHED
         - PAYED
+    PaymentType:
+      type: string
+      enum:
+        - CASH
+        - CREDIT_CARD
+        - DEBIT_CARD
   responses:
     BadRequest:
       description: Invalid request.

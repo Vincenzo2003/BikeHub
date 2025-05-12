@@ -61,6 +61,37 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(PaymentMethodDeletingException.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentMethodDeletingException(PaymentMethodDeletingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentMethodDoesNotExists.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentMethodDoesNotExists(PaymentMethodDoesNotExists exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentMethodNotFound.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentMethodNotFound(PaymentMethodNotFound exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentMethodSavingException.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentMethodSavingException(PaymentMethodSavingException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentMethodTypeAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentMethodTypeAlreadyExistsException(PaymentMethodTypeAlreadyExistsException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidCredentialsException(InvalidCredentialsException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);

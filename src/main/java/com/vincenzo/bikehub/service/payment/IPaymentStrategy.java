@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.service.payment;
 
-import com.vincenzo.bikehub.enums.PaymentType;
 import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.PaymentMethod;
 import org.springframework.stereotype.Component;
@@ -13,5 +12,5 @@ public interface IPaymentStrategy {
 
     PaymentMethod retrievePaymentDetails(Account user);
 
-    PaymentType getPaymentType();
+    com.vincenzo.bikehub.server.gen.model.PaymentType getPaymentType();
 }

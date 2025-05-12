@@ -36,10 +36,13 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public com.vincenzo.bikehub.entity.Account getAccountEntity(String username) {
+        return accountRepository.findByUsername(username)
+                .orElseThrow(AccountNotFoundException::new);
+    }
+
     public Account getAccount(String username) {
-        com.vincenzo.bikehub.entity.Account accountEntity = accountRepository.findByUsername(
-                username).orElseThrow(AccountNotFoundException::new);
-        return accountMapper.entityToModel(accountEntity);
+        return accountMapper.entityToModel(getAccountEntity(username));
     }
 
     @Transactional

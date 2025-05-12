@@ -1,7 +1,5 @@
 package com.vincenzo.bikehub.entity;
 
-import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
-import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,10 +30,10 @@ public class Bicycle {
     @ManyToOne
     private ParkingLot currentParkingLot;
 
-    @ElementCollection(targetClass = BicycleCategory.class)
+    @ElementCollection(targetClass = com.vincenzo.bikehub.server.gen.model.BicycleCategory.class)
     @Enumerated(EnumType.STRING)
     @Column(name = "categories")
-    private Set<BicycleCategory> categories = new HashSet<>();
+    private Set<com.vincenzo.bikehub.server.gen.model.BicycleCategory> categories = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REMOVE})
     private List<Equipment> equipments;
@@ -45,7 +43,7 @@ public class Bicycle {
     private String chassisId;
 
     @Column(nullable = false)
-    private BicycleStatus status = BicycleStatus.AVAILABLE;
+    private com.vincenzo.bikehub.server.gen.model.BicycleStatus status = com.vincenzo.bikehub.server.gen.model.BicycleStatus.AVAILABLE;
 
     @Column(nullable = false)
     private String brand;

@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.service.payment;
 
-import com.vincenzo.bikehub.enums.PaymentType;
 import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.PaymentMethod;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class CreditCardPaymentStrategy implements IPaymentStrategy {
 
 
     @Override
-    public PaymentType getPaymentType() {
-        return PaymentType.CREDIT_CARD;
+    public com.vincenzo.bikehub.server.gen.model.PaymentType getPaymentType() {
+        return com.vincenzo.bikehub.server.gen.model.PaymentType.CREDIT_CARD;
     }
 }

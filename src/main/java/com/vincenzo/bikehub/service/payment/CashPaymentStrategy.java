@@ -1,7 +1,6 @@
 package com.vincenzo.bikehub.service.payment;
 
 
-import com.vincenzo.bikehub.enums.PaymentType;
 import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.PaymentMethod;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,8 @@ public class CashPaymentStrategy implements IPaymentStrategy {
     }
 
     @Override
-    public PaymentType getPaymentType() {
-        return PaymentType.CASH;
+    public com.vincenzo.bikehub.server.gen.model.PaymentType getPaymentType() {
+        return com.vincenzo.bikehub.server.gen.model.PaymentType.CASH;
     }
 }
 

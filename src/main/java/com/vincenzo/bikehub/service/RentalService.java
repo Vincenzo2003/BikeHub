@@ -3,11 +3,13 @@ package com.vincenzo.bikehub.service;
 
 import com.vincenzo.bikehub.exceptions.*;
 import com.vincenzo.bikehub.mapper.RentalMapper;
+import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.RentalRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
+
+@Slf4j
 @Service
 public class RentalService {
 
@@ -25,12 +29,22 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final BicycleService bicycleService;
     private final ParkingLotService parkingLotService;
+    private final AuthService authService;
+    private final PaymentService paymentService;
 
-    public RentalService(RentalMapper rentalMapper, RentalRepository rentalRepository, BicycleService bicycleService, ParkingLotService parkingLotService) {
+    public RentalService(
+            RentalMapper rentalMapper,
+            RentalRepository rentalRepository,
+            BicycleService bicycleService,
+            ParkingLotService parkingLotService,
+            AuthService authService,
+            PaymentService paymentService) {
         this.rentalMapper = rentalMapper;
         this.rentalRepository = rentalRepository;
         this.bicycleService = bicycleService;
         this.parkingLotService = parkingLotService;
+        this.authService = authService;
+        this.paymentService = paymentService;
     }
 
     private Rental saveRental(Rental rental){
@@ -179,5 +193,19 @@ public class RentalService {
         rentedBicycleToUpdate.setStatus(BicycleStatus.AVAILABLE);
         rentedBicycleToUpdate.setTotalRentTimeInSeconds(rentedBicycleToUpdate.getTotalRentTimeInSeconds() + Duration.between(rentalStartedAt, rentalFinishedAt).toSeconds());
         return updateRental(rentalId, rentalToUpdate);
+    }
+
+    public Rental payRental(UUID rentalId, com.vincenzo.bikehub.server.gen.model.PaymentType paymentType, String username) {
+        Rental rental = getRental(rentalId);
+        RentalStatus rentalStatus = rental.getStatus();
+        if (rentalStatus == RentalStatus.PAYED) {
+            log.error("Rental {} has already been paid for", rentalId);
+            return null; //TODO throw specific exception
+        } else if (rentalStatus != RentalStatus.FINISHED) {
+            log.error("Rental {} is in incorrect status", rentalId);
+            return null;
+        }
+        paymentService.processPayment(paymentType, rental.getTotalPrice(), username);
+        return getRental(rentalId);
     }
 }

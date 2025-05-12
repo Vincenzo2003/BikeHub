@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.entity;
 
-import com.vincenzo.bikehub.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,12 +30,12 @@ public class PaymentMethod {
     private String holder;
 
     @Column(nullable = false)
-    private PaymentType type;
+    private com.vincenzo.bikehub.server.gen.model.PaymentType type;
 
     @Column
-    private Date expire_at;
+    private Date expireAt;
 
-    @Column
-    private boolean defaultPaymentMethod;
+    @ManyToOne
+    private Account account;
 
 }

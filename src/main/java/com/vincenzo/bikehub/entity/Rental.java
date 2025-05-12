@@ -1,6 +1,5 @@
 package com.vincenzo.bikehub.entity;
 
-import com.vincenzo.bikehub.server.gen.model.RentalStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +36,7 @@ public class Rental{
     private ParkingLot returnParkingLot;
 
     @Column(nullable = false)
-    private RentalStatus status;
+    private com.vincenzo.bikehub.server.gen.model.RentalStatus status;
 
     @CreatedDate
     private Instant createdAt;
