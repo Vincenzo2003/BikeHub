@@ -59,7 +59,6 @@ public class PaymentService {
             log.error("Payment failed for user: {}", username);
             //TODO: throw error
         }
-        //TODO METTERE AGGIORNARE STATUS RENTAL
     }
 
     public com.vincenzo.bikehub.entity.PaymentMethod getPaymentMethodEntity(UUID paymentMethodId) {

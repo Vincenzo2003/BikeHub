@@ -29,6 +29,7 @@ public class BicycleController implements BicycleApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> createBicycle(CreateBicycle createBicycleRequest) {
         Bicycle serializedBicycleModel = bicycleMapper.createBicycleRequestToModel(createBicycleRequest);
         Bicycle createdBicycleModel = bicycleService.createBicycle(serializedBicycleModel);

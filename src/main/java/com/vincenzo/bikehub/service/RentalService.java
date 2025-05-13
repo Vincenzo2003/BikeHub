@@ -3,7 +3,6 @@ package com.vincenzo.bikehub.service;
 
 import com.vincenzo.bikehub.exceptions.*;
 import com.vincenzo.bikehub.mapper.RentalMapper;
-import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.RentalRepository;
@@ -206,6 +205,7 @@ public class RentalService {
             return null;
         }
         paymentService.processPayment(paymentType, rental.getTotalPrice(), username);
-        return getRental(rentalId);
+        rental.setStatus(RentalStatus.PAYED);
+        return updateRental(rentalId, rental);
     }
 }
