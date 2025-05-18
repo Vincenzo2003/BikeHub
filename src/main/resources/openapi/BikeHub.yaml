@@ -584,6 +584,57 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /stats/category/{categoryType}:
+    get:
+      description: Retrieve category statistics.
+      operationId: retrieveCategoryStats
+      tags:
+        - Statistics
+      parameters:
+        - in: path
+          name: categoryType
+          required: true
+          schema:
+            $ref: '#/components/schemas/BicycleCategory'
+      responses:
+        '200':
+          description: Category statistics successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /stats/bicycle/{bicycleId}:
+    get:
+      description: Retrieve bicycle statistics.
+      operationId: retrieveBicycleStats
+      tags:
+        - Statistics
+      parameters:
+        - in: path
+          name: bicycleId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Bicycle statistics successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 
 
 components:
@@ -914,6 +965,13 @@ components:
         expireAt:
           type: string
           format: date
+    Stats:
+      type: object
+      properties:
+        usagePercentage:
+          type: integer
+          minimum: 0
+          maximum: 100
     BicycleCategory:
       type: string
       enum:

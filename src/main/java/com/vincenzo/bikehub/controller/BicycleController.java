@@ -46,7 +46,7 @@ public class BicycleController implements BicycleApi {
 
     @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Bicycle> retrieveBicycle(UUID bicycleId) {
-        Bicycle bicycle = bicycleService.getBicycleModel(bicycleId);
+        Bicycle bicycle = bicycleService.retrieveBicycle(bicycleId, false);
         com.vincenzo.bikehub.server.gen.model.Bicycle response = bicycleMapper.modelToBicycle(bicycle);
         return ResponseEntity.ok(response);
     }

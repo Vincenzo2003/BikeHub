@@ -7,12 +7,15 @@ import com.vincenzo.bikehub.exceptions.BicycleSavingException;
 import com.vincenzo.bikehub.mapper.BicycleMapper;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.BicycleRepository;
+import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
+import com.vincenzo.bikehub.server.gen.model.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -82,6 +85,25 @@ public class BicycleService {
         return bicycleMapper.entityToModel(bicycleEntity);
     }
 
+    public Integer calculateUsagePercentage(Long bicycleTotalRentTime) {
+        Long totalRentTime = bicycleRepository.getTotalRentTime();
+        if (totalRentTime == null || totalRentTime.equals(0L)) {
+            return 0;
+        }
+        Long percentage = (bicycleTotalRentTime * 100) / totalRentTime;
+        return  percentage.intValue();
+    };
+
+    public Bicycle retrieveBicycle(UUID bicycleId, Boolean withStats) {
+        Bicycle bicycleModel = getBicycleModel(bicycleId);
+        if (withStats != null && withStats) {
+            Stats stats = new Stats();
+            stats.setUsagePercentage(calculateUsagePercentage(bicycleModel.getTotalRentTimeInSeconds()));
+            bicycleModel.setStats(stats);
+        }
+        return bicycleModel;
+    }
+
     @Transactional
     public Bicycle updateBicycle(UUID bicycleId, Bicycle bicycle) {
         com.vincenzo.bikehub.entity.Bicycle existingBicycle =
@@ -133,5 +155,17 @@ public class BicycleService {
         } catch (DataIntegrityViolationException exc) {
             throw new BicycleSavingException();
         }
+    }
+
+    public Stats retrieveCategoryStats(BicycleCategory category) {
+        Long totalRentTime = bicycleRepository.getTotalRentTime();
+        Stats stats = new Stats();
+        if (totalRentTime == null || totalRentTime.equals(0L)) {
+            return stats;
+        }
+        Long totalRentTimeByCategory = bicycleRepository.getTotalRentTimeByCategory(category);
+        Long categoryUsagePercentage = (totalRentTimeByCategory / totalRentTime) * 100;
+        stats.setUsagePercentage(categoryUsagePercentage.intValue());
+        return stats;
     }
 }

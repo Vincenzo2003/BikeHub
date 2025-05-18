@@ -20,4 +20,9 @@ public interface BicycleRepository extends JpaRepository<Bicycle, UUID> {
     @Query("SELECT b FROM Bicycle b WHERE b.id = :id")
     Optional<Bicycle> findByIdWithPessimisticLock(@Param("id") UUID id);
 
+    @Query("SELECT SUM(b.totalRentTimeInSeconds) FROM Bicycle b")
+    Long getTotalRentTime();
+
+    @Query("SELECT SUM(b.totalRentTimeInSeconds) FROM Bicycle b WHERE :category MEMBER OF b.categories")
+    Long getTotalRentTimeByCategory(com.vincenzo.bikehub.server.gen.model.BicycleCategory category);
 }

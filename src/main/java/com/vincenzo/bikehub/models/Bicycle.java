@@ -2,6 +2,7 @@ package com.vincenzo.bikehub.models;
 
 import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
+import com.vincenzo.bikehub.server.gen.model.Stats;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,4 +40,5 @@ public class Bicycle {
 
     private Instant registeredAt;
 
+    private Stats stats;
 }

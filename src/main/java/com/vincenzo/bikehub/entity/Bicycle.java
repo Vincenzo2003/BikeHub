@@ -32,7 +32,6 @@ public class Bicycle {
 
     @ElementCollection(targetClass = com.vincenzo.bikehub.server.gen.model.BicycleCategory.class)
     @Enumerated(EnumType.STRING)
-    @Column(name = "categories")
     private Set<com.vincenzo.bikehub.server.gen.model.BicycleCategory> categories = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.REMOVE})
