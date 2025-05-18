@@ -4,7 +4,7 @@ import com.vincenzo.bikehub.mapper.RentalMapper;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.server.gen.controller.RentalApi;
 import com.vincenzo.bikehub.server.gen.model.*;
-import com.vincenzo.bikehub.service.RentalService;
+import com.vincenzo.bikehub.service.rental.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,17 +19,23 @@ public class RentalController implements RentalApi {
 
     private final RentalMapper rentalMapper;
     private final RentalService rentalService;
+    private final CommandExecutor commandExecutor;
 
-    public RentalController(RentalMapper rentalMapper, RentalService rentalService) {
+    public RentalController(
+            RentalMapper rentalMapper,
+            RentalService rentalService,
+            CommandExecutor commandExecutor
+    ) {
         this.rentalMapper = rentalMapper;
         this.rentalService = rentalService;
+        this.commandExecutor = commandExecutor;
     }
 
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> createRental(CreateRental createRentalRequest) {
         Rental serializedRentalModel = rentalMapper.createRentalToModel(createRentalRequest);
-        Rental createdRentalModel = rentalService.createRental(serializedRentalModel);
+        Rental createdRentalModel = commandExecutor.executeCommand(new BookRentalCommand(rentalService, serializedRentalModel));
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(createdRentalModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -60,20 +66,20 @@ public class RentalController implements RentalApi {
     @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> payRental(UUID rentalId, PayRental payRental) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Rental rental = rentalService.payRental(rentalId, payRental.getPaymentType(), userDetails.getUsername());
+        Rental rental = commandExecutor.executeCommand(new PayRentalCommand(rentalService, rentalId, payRental.getPaymentType(), userDetails.getUsername()));
         return ResponseEntity.ok(rentalMapper.modelToRental(rental));
     }
 
     @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> pickupRental(UUID rentalId) {
-        Rental rental = rentalService.pickupRental(rentalId);
+        Rental rental = commandExecutor.executeCommand(new PickUpRentalCommand(rentalService, rentalId));
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
         return  ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> returnRental(UUID rentalId, ReturnRentalDetails returnRentalDetails) {
-        Rental rental = rentalService.returnRental(rentalId, returnRentalDetails.getReturnParkingLotName());
+        Rental rental = commandExecutor.executeCommand(new ReturnRentalCommand(rentalService, rentalId, returnRentalDetails.getReturnParkingLotName()));
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
         return  ResponseEntity.ok(response);
     }

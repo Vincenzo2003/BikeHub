@@ -1,4 +1,4 @@
-package com.vincenzo.bikehub.service;
+package com.vincenzo.bikehub.service.rental;
 
 
 import com.vincenzo.bikehub.exceptions.*;
@@ -8,6 +8,9 @@ import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.repository.RentalRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
+import com.vincenzo.bikehub.service.BicycleService;
+import com.vincenzo.bikehub.service.ParkingLotService;
+import com.vincenzo.bikehub.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,6 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final BicycleService bicycleService;
     private final ParkingLotService parkingLotService;
-    private final AuthService authService;
     private final PaymentService paymentService;
 
     public RentalService(
@@ -36,13 +38,11 @@ public class RentalService {
             RentalRepository rentalRepository,
             BicycleService bicycleService,
             ParkingLotService parkingLotService,
-            AuthService authService,
             PaymentService paymentService) {
         this.rentalMapper = rentalMapper;
         this.rentalRepository = rentalRepository;
         this.bicycleService = bicycleService;
         this.parkingLotService = parkingLotService;
-        this.authService = authService;
         this.paymentService = paymentService;
     }
 
