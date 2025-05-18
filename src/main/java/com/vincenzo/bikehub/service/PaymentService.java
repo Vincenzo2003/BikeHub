@@ -51,13 +51,13 @@ public class PaymentService {
 
         if (paymentStrategy == null) {
             log.error("Payment strategy not found for type: {}", paymentType);
-            //TODO: throw error
+            throw new PaymentStrategyNotImplemented(paymentType);
         }
 
         boolean isPaymentSucceeded = paymentStrategy.pay(user, priceToPay);
         if (!isPaymentSucceeded) {
             log.error("Payment failed for user: {}", username);
-            //TODO: throw error
+            throw new PaymentError();
         }
     }
 
@@ -105,19 +105,19 @@ public class PaymentService {
 
         if (paymentMethod.getCc() != null) {
             existingPaymentMethod.setCc(paymentMethod.getCc());
-        };
+        }
         if (paymentMethod.getCvc() != null) {
             existingPaymentMethod.setCvc(paymentMethod.getCvc());
-        };
+        }
         if (paymentMethod.getHolder() != null) {
             existingPaymentMethod.setHolder(paymentMethod.getHolder());
-        };
+        }
         if (paymentMethod.getType() != null) {
             existingPaymentMethod.setType(paymentMethod.getType());
-        };
+        }
         if (paymentMethod.getExpireAt() != null) {
             existingPaymentMethod.setExpireAt(paymentMethod.getExpireAt());
-        };
+        }
 
         com.vincenzo.bikehub.entity.PaymentMethod savedPaymentMethod;
         try {

@@ -1,0 +1,11 @@
+meta {
+  name: List users'payment methods
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/payment/list
+  body: none
+  auth: inherit
+}

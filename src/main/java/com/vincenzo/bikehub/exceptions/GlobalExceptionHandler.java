@@ -61,6 +61,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(RentalStatusException.class)
+    public ResponseEntity<ExceptionResponse> handleRentalStatusException(RentalStatusException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentStrategyNotImplemented.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentStrategyNotImplemented(PaymentStrategyNotImplemented exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
+    @ExceptionHandler(PaymentError.class)
+    public ResponseEntity<ExceptionResponse> handlePaymentError(PaymentError exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(PaymentMethodDeletingException.class)
     public ResponseEntity<ExceptionResponse> handlePaymentMethodDeletingException(PaymentMethodDeletingException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);

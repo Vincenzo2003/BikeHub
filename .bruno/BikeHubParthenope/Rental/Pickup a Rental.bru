@@ -1,0 +1,15 @@
+meta {
+  name: Pickup a Rental
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/rental/:id/pickup
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{rentalId}}
+}

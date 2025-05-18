@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve a Rental
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/rental/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{rentalId}}
+}

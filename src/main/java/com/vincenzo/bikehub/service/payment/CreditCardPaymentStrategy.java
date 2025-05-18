@@ -14,23 +14,19 @@ public class CreditCardPaymentStrategy implements IPaymentStrategy {
     @Override
     public boolean pay(Account user, Float amount) {
         PaymentMethod paymentDetails = retrievePaymentDetails(user);
-        log.info("Try to pay {} EUR with credit card of user {}", amount, user.getUsername());
-        boolean paymentSuccessful = processCreditCardPayment(amount, paymentDetails);
+        String username = user.getUsername();
+        boolean paymentSuccessful = processCreditCardPayment(amount, paymentDetails, username);
         if (paymentSuccessful) {
-            log.info("Payment with credit card of user {} successful.", user.getUsername());
+            log.info("Payment with credit card of user {} successful.", username);
         } else {
-            log.info("Payment with credit card of user {} refused.", user.getUsername());
+            log.info("Payment with credit card of user {} refused.", username);
         }
         return paymentSuccessful;
     }
 
-    @Override
-    public PaymentMethod retrievePaymentDetails(Account user) {
-        return null;
-    }
-
-    public boolean processCreditCardPayment(Float amount, PaymentMethod paymentDetails) {
-        return false;
+    public boolean processCreditCardPayment(Float amount, PaymentMethod paymentDetails, String username) {
+        log.info("Try to pay {} EUR with credit card of user {} with holder {}", amount, username, paymentDetails.getHolder());
+        return Math.random() < 0.5;
     }
 
 

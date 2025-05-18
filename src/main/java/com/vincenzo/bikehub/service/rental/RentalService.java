@@ -160,7 +160,7 @@ public class RentalService {
     private Float determinateRentalTotalPrice(Float hourlyPrice, Instant rentalStartedAt, Instant rentalFinishedAt) {
         Long rentalSeconds = Duration.between(rentalStartedAt, rentalFinishedAt).toSeconds();
         Float costPerSecond = hourlyPrice / (60 * 60);
-        Float price = costPerSecond * rentalSeconds;
+        float price = costPerSecond * rentalSeconds;
         BigDecimal truncatedPrice = new BigDecimal(Float.toString(price)).setScale(2, RoundingMode.HALF_UP);
         return truncatedPrice.floatValue();
     }
@@ -199,10 +199,10 @@ public class RentalService {
         RentalStatus rentalStatus = rental.getStatus();
         if (rentalStatus == RentalStatus.PAYED) {
             log.error("Rental {} has already been paid for", rentalId);
-            return null; //TODO throw specific exception
+            return rental;
         } else if (rentalStatus != RentalStatus.FINISHED) {
-            log.error("Rental {} is in incorrect status", rentalId);
-            return null;
+            log.error("Rental {} is not finished yet", rentalId);
+            throw new RentalStatusException();
         }
         paymentService.processPayment(paymentType, rental.getTotalPrice(), username);
         rental.setStatus(RentalStatus.PAYED);

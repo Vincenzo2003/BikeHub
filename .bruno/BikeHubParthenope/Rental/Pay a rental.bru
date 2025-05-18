@@ -1,0 +1,21 @@
+meta {
+  name: Pay a rental
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/rental/:id/pay
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{rentalId}}
+}
+
+body:json {
+  {
+    "paymentType": "CREDIT_CARD"
+  }
+}

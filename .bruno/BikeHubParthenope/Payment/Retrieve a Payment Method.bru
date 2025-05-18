@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve a Payment Method
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/payment/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{paymentId}}
+}

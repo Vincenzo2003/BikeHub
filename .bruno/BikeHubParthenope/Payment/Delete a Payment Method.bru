@@ -1,0 +1,15 @@
+meta {
+  name: Delete a Payment Method
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/payment/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{paymentId}}
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Return a Rental
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/rental/:id/return
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: {{rentalId}}
+}
+
+body:json {
+  {
+    "returnParkingLotName": null
+  }
+}

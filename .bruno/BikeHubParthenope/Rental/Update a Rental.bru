@@ -1,0 +1,21 @@
+meta {
+  name: Update a Rental
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{baseUrl}}/rental/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: {{rentalId}}
+}
+
+body:json {
+  {
+    "totalPrice": 1
+  }
+}

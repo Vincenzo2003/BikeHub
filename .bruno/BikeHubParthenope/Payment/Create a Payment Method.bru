@@ -1,0 +1,32 @@
+meta {
+  name: Create a Payment Method
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/payment
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+body:json {
+  {
+    "type": "CREDIT_CARD",
+    "cc": "1234",
+    "cvc": "123",
+    "holder": "Vincenzo Guarino",
+    "expireAt": "2027-02-26",
+    "defaultMethod": true
+  }
+}
+
+script:post-response {
+  if(res.body.id){
+    bru.setVar("paymentId", res.body.id);
+  }
+}

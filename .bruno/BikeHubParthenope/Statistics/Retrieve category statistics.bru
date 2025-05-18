@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve category statistics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/stats/category/:category
+  body: none
+  auth: inherit
+}
+
+params:path {
+  category: {{bicycleCategory}}
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve bicycle statistics
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/stats/bicycle/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{bicycleId}}
+}
