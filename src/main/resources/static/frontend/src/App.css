@@ -1,0 +1,27 @@
+/* Stili globali per l'intera applicazione */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f6f9; /* Colore di sfondo leggero per l'app */
+}
+
+/* Stili per il contenitore principale dell'applicazione */
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* L'altezza minima è il 100% della viewport */
+}
+
+/* Stili per il contenitore principale del contenuto (main) */
+.App-main {
+  flex-grow: 1; /* Fa in modo che il main occupi lo spazio rimanente */
+  display: flex;
+  justify-content: center; /* Centra orizzontalmente */
+  align-items: flex-start; /* Allinea in alto (per evitare che i form siano troppo compressi) */
+  padding: 20px;
+}
