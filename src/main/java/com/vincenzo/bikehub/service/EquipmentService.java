@@ -3,11 +3,13 @@ package com.vincenzo.bikehub.service;
 import com.vincenzo.bikehub.exceptions.BicycleSavingException;
 import com.vincenzo.bikehub.exceptions.EquipmentNotFound;
 import com.vincenzo.bikehub.mapper.EquipmentMapper;
-import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.models.Equipment;
+import com.vincenzo.bikehub.models.EquipmentsPage;
 import com.vincenzo.bikehub.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +32,6 @@ public class EquipmentService {
         this.equipmentRepository = equipmentRepository;
         this.equipmentMapper = equipmentMapper;
         this.bicycleService = bicycleService;
-    }
-
-    public Equipment getEquipment(UUID equipmentId) {
-        com.vincenzo.bikehub.entity.Equipment EquipmentEntity =
-                equipmentRepository.findById(equipmentId)
-                        .orElseThrow(EquipmentNotFound::new);
-        return equipmentMapper.entityToModel(EquipmentEntity);
     }
 
     @Transactional
@@ -102,4 +97,15 @@ public class EquipmentService {
             throw new BicycleSavingException();
         }
     }
+
+    public EquipmentsPage retrieveEquipments(Pageable paging) {
+        Page<com.vincenzo.bikehub.entity.Equipment> equipmentsEntitiesPage = equipmentRepository.findAll(paging);
+        EquipmentsPage equipmentsPage = new EquipmentsPage();
+        equipmentsPage.setEquipments(equipmentsEntitiesPage.getContent().stream().map(equipmentMapper::entityToModel).toList());
+        equipmentsPage.setTotalPages(equipmentsEntitiesPage.getTotalPages());
+        equipmentsPage.setCurrentPage(equipmentsEntitiesPage.getNumber());
+        equipmentsPage.setTotalItems((int) equipmentsEntitiesPage.getTotalElements());
+        return equipmentsPage;
+    }
+
 }

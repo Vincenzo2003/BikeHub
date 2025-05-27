@@ -2,6 +2,7 @@ package com.vincenzo.bikehub.mapper;
 
 import com.vincenzo.bikehub.enums.EquipmentType;
 import com.vincenzo.bikehub.models.Equipment;
+import com.vincenzo.bikehub.models.EquipmentsPage;
 import com.vincenzo.bikehub.server.gen.model.CreateEquipment;
 import com.vincenzo.bikehub.server.gen.model.UpdateEquipment;
 import org.mapstruct.Mapper;
@@ -28,4 +29,8 @@ public abstract class EquipmentMapper {
 
     @Mapping(target = "id", ignore = true)
     public abstract Equipment updateEquipmentToModel(UpdateEquipment updateEquipmentRequest);
+
+    @Mapping(target = "results", source = "equipments")
+    public abstract com.vincenzo.bikehub.server.gen.model.EquipmentsPage equipmentsPageModelToEquipmentsPage(EquipmentsPage equipmentsPage);
+
 }
