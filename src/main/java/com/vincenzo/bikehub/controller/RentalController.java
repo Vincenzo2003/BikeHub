@@ -3,8 +3,11 @@ package com.vincenzo.bikehub.controller;
 import com.vincenzo.bikehub.mapper.RentalMapper;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.server.gen.controller.RentalApi;
+import com.vincenzo.bikehub.server.gen.controller.RentalsApi;
 import com.vincenzo.bikehub.server.gen.model.*;
 import com.vincenzo.bikehub.service.rental.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-public class RentalController implements RentalApi {
+public class RentalController implements RentalApi, RentalsApi {
 
     private final RentalMapper rentalMapper;
     private final RentalService rentalService;
@@ -82,5 +85,13 @@ public class RentalController implements RentalApi {
         Rental rental = commandExecutor.executeCommand(new ReturnRentalCommand(rentalService, rentalId, returnRentalDetails.getReturnParkingLotName()));
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(rental);
         return  ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<RentalsPage> retrieveRentals(Integer page, Integer count) {
+        Pageable paging = PageRequest.of(page, count);
+        com.vincenzo.bikehub.models.RentalsPage rentalsPage = rentalService.retrieveRentals(paging);
+        com.vincenzo.bikehub.server.gen.model.RentalsPage response = rentalMapper.rentalsPageModelToRentalsPage(rentalsPage);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,6 +1,8 @@
 package com.vincenzo.bikehub.mapper;
 
+import com.vincenzo.bikehub.models.BicyclesPage;
 import com.vincenzo.bikehub.models.Rental;
+import com.vincenzo.bikehub.models.RentalsPage;
 import com.vincenzo.bikehub.server.gen.model.CreateRental;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
 import com.vincenzo.bikehub.server.gen.model.ReturnRentalDetails;
@@ -46,4 +48,8 @@ public abstract class RentalMapper {
     @Mapping(target = "startedAt", ignore = true)
     @Mapping(target = "finishedAt", ignore = true)
     public abstract Rental updateRentalRequestToModel(UpdateRental updateRentalRequest);
+
+    @Mapping(target = "results", source = "rentals")
+    public abstract com.vincenzo.bikehub.server.gen.model.RentalsPage rentalsPageModelToRentalsPage(RentalsPage rentalsPage);
+
 }

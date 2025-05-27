@@ -975,6 +975,7 @@ components:
       properties:
         bicycleId:
           type: string
+          format: uuid
     Rental:
       type: object
       required:

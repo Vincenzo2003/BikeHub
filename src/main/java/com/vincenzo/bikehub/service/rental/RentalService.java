@@ -5,6 +5,7 @@ import com.vincenzo.bikehub.exceptions.*;
 import com.vincenzo.bikehub.mapper.RentalMapper;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.models.Bicycle;
+import com.vincenzo.bikehub.models.RentalsPage;
 import com.vincenzo.bikehub.repository.RentalRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
@@ -13,6 +14,8 @@ import com.vincenzo.bikehub.service.ParkingLotService;
 import com.vincenzo.bikehub.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,4 +211,15 @@ public class RentalService {
         rental.setStatus(RentalStatus.PAYED);
         return updateRental(rentalId, rental);
     }
+
+    public RentalsPage retrieveRentals(Pageable paging) {
+        Page<com.vincenzo.bikehub.entity.Rental> rentalsEntitiesPage = rentalRepository.findAll(paging);
+        RentalsPage rentalsPage = new RentalsPage();
+        rentalsPage.setRentals(rentalsEntitiesPage.getContent().stream().map(rentalMapper::entityToModel).toList());
+        rentalsPage.setTotalPages(rentalsEntitiesPage.getTotalPages());
+        rentalsPage.setCurrentPage(rentalsEntitiesPage.getNumber());
+        rentalsPage.setTotalItems((int) rentalsEntitiesPage.getTotalElements());
+        return rentalsPage;
+    }
+
 }

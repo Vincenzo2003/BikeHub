@@ -1,0 +1,16 @@
+meta {
+  name: Retrieve rentals list
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/rentals?page=0&count=5
+  body: none
+  auth: inherit
+}
+
+params:query {
+  page: 0
+  count: 5
+}
