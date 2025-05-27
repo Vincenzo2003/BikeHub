@@ -2,6 +2,7 @@ package com.vincenzo.bikehub.mapper;
 
 import com.vincenzo.bikehub.enums.EquipmentType;
 import com.vincenzo.bikehub.models.Bicycle;
+import com.vincenzo.bikehub.models.BicyclesPage;
 import com.vincenzo.bikehub.server.gen.model.*;
 import org.mapstruct.*;
 
@@ -36,4 +37,7 @@ public abstract class BicycleMapper {
     @Mapping(target = "currentParkingLotName", source = "currentParkingLot.name")
     @Mapping(target = "stats", ignore = true)
     public abstract Bicycle entityToModel(com.vincenzo.bikehub.entity.Bicycle bicycle);
+
+    @Mapping(target = "results", source = "bicycles")
+    public abstract com.vincenzo.bikehub.server.gen.model.BicyclesPage bicyclesPageModelToBicyclesPage(BicyclesPage bicyclesPage);
 }

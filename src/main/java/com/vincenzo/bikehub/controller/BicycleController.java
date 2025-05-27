@@ -3,9 +3,12 @@ package com.vincenzo.bikehub.controller;
 import com.vincenzo.bikehub.mapper.BicycleMapper;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.server.gen.controller.BicycleApi;
+import com.vincenzo.bikehub.server.gen.controller.BicyclesApi;
 import com.vincenzo.bikehub.server.gen.model.*;
 import com.vincenzo.bikehub.service.BicycleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-public class BicycleController implements BicycleApi {
+public class BicycleController implements BicycleApi, BicyclesApi {
 
     private final BicycleService bicycleService;
     private final BicycleMapper bicycleMapper;
@@ -57,6 +60,14 @@ public class BicycleController implements BicycleApi {
         Bicycle serializedBicycleModel = bicycleMapper.updateBicycleRequestToModel(updateBicycleRequest);
         Bicycle bicycle = bicycleService.updateBicycle(bicycleId, serializedBicycleModel);
         com.vincenzo.bikehub.server.gen.model.Bicycle response = bicycleMapper.modelToBicycle(bicycle);
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<BicyclesPage> retrieveBicycles(Integer page, Integer count) {
+        Pageable paging = PageRequest.of(page, count);
+        com.vincenzo.bikehub.models.BicyclesPage bicyclesPage = bicycleService.retrieveBicycles(paging);
+        com.vincenzo.bikehub.server.gen.model.BicyclesPage response = bicycleMapper.bicyclesPageModelToBicyclesPage(bicyclesPage);
         return ResponseEntity.ok(response);
     }
 }

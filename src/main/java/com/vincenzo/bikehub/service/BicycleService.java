@@ -6,17 +6,20 @@ import com.vincenzo.bikehub.exceptions.BicycleNotFoundException;
 import com.vincenzo.bikehub.exceptions.BicycleSavingException;
 import com.vincenzo.bikehub.mapper.BicycleMapper;
 import com.vincenzo.bikehub.models.Bicycle;
+import com.vincenzo.bikehub.models.BicyclesPage;
 import com.vincenzo.bikehub.repository.BicycleRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleCategory;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.Stats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BicycleService {
@@ -167,5 +170,15 @@ public class BicycleService {
         Long categoryUsagePercentage = (totalRentTimeByCategory / totalRentTime) * 100;
         stats.setUsagePercentage(categoryUsagePercentage.intValue());
         return stats;
+    }
+
+    public BicyclesPage retrieveBicycles(Pageable paging) {
+        Page<com.vincenzo.bikehub.entity.Bicycle> bicyclesEntitiesPage = bicycleRepository.findAll(paging);
+        BicyclesPage bicyclesPage = new BicyclesPage();
+        bicyclesPage.setBicycles(bicyclesEntitiesPage.getContent().stream().map(bicycleMapper::entityToModel).toList());
+        bicyclesPage.setTotalPages(bicyclesEntitiesPage.getTotalPages());
+        bicyclesPage.setCurrentPage(bicyclesEntitiesPage.getNumber());
+        bicyclesPage.setTotalItems((int) bicyclesEntitiesPage.getTotalElements());
+        return bicyclesPage;
     }
 }
