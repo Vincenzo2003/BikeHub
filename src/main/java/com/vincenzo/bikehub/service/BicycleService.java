@@ -167,6 +167,9 @@ public class BicycleService {
             return stats;
         }
         Long totalRentTimeByCategory = bicycleRepository.getTotalRentTimeByCategory(category);
+        if (totalRentTimeByCategory == null || totalRentTimeByCategory.equals(0L)) {
+            return stats;
+        }
         Long categoryUsagePercentage = (totalRentTimeByCategory / totalRentTime) * 100;
         stats.setUsagePercentage(categoryUsagePercentage.intValue());
         return stats;

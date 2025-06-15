@@ -7,6 +7,7 @@ import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.PaymentMethod;
 
 import com.vincenzo.bikehub.repository.PaymentMethodRepository;
+import com.vincenzo.bikehub.server.gen.model.PaymentType;
 import com.vincenzo.bikehub.service.payment.IPaymentStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,11 @@ public class PaymentService {
 
     public void processPayment(com.vincenzo.bikehub.server.gen.model.PaymentType paymentType, Float priceToPay, String username) {
         Account user = authService.getAccount(username);
-        boolean existsByAccountAndType = paymentMethodRepository.existsByAccountIdAndType(user.getId(), paymentType);
-        if (!existsByAccountAndType) {
-            throw new PaymentMethodDoesNotExists(paymentType);
+        if (paymentType != PaymentType.CASH) {
+            boolean existsByAccountAndType = paymentMethodRepository.existsByAccountIdAndType(user.getId(), paymentType);
+            if (!existsByAccountAndType) {
+                throw new PaymentMethodDoesNotExists(paymentType, username);
+            }
         }
         IPaymentStrategy paymentStrategy = strategies.get(paymentType);
 

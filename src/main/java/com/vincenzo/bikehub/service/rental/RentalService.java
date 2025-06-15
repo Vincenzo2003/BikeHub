@@ -3,12 +3,14 @@ package com.vincenzo.bikehub.service.rental;
 
 import com.vincenzo.bikehub.exceptions.*;
 import com.vincenzo.bikehub.mapper.RentalMapper;
+import com.vincenzo.bikehub.models.Account;
 import com.vincenzo.bikehub.models.Rental;
 import com.vincenzo.bikehub.models.Bicycle;
 import com.vincenzo.bikehub.models.RentalsPage;
 import com.vincenzo.bikehub.repository.RentalRepository;
 import com.vincenzo.bikehub.server.gen.model.BicycleStatus;
 import com.vincenzo.bikehub.server.gen.model.RentalStatus;
+import com.vincenzo.bikehub.service.AuthService;
 import com.vincenzo.bikehub.service.BicycleService;
 import com.vincenzo.bikehub.service.ParkingLotService;
 import com.vincenzo.bikehub.service.PaymentService;
@@ -23,6 +25,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -35,23 +40,28 @@ public class RentalService {
     private final BicycleService bicycleService;
     private final ParkingLotService parkingLotService;
     private final PaymentService paymentService;
+    private final AuthService authService;
 
     public RentalService(
             RentalMapper rentalMapper,
             RentalRepository rentalRepository,
             BicycleService bicycleService,
             ParkingLotService parkingLotService,
-            PaymentService paymentService) {
+            PaymentService paymentService,
+            AuthService authService
+    ) {
         this.rentalMapper = rentalMapper;
         this.rentalRepository = rentalRepository;
         this.bicycleService = bicycleService;
         this.parkingLotService = parkingLotService;
         this.paymentService = paymentService;
+        this.authService = authService;
     }
 
     private Rental saveRental(Rental rental){
         com.vincenzo.bikehub.entity.Rental rentalEntity = new com.vincenzo.bikehub.entity.Rental();
         rentalEntity.setBicycle(bicycleService.getBicycleEntity(rental.getBicycleId()));
+        rentalEntity.setAccount(authService.getAccountEntity(rental.getAccountUsername()));
         rentalEntity.setPickUpParkingLot(parkingLotService.getParkingLotEntity(rental.getPickUpParkingLotName()));
         if (rental.getReturnParkingLotName() != null) {
             rentalEntity.setReturnParkingLot(parkingLotService.getParkingLotEntity(rental.getReturnParkingLotName()));
@@ -66,8 +76,17 @@ public class RentalService {
     }
 
     @Transactional
-    public Rental createRental(Rental rental){
+    public Rental createRental(Rental rental, String username) {
         UUID bicycleToRentId = rental.getBicycleId();
+        Account user = authService.getAccount(username);
+        List<RentalStatus> rentalStatuses = new ArrayList<>();
+        rentalStatuses.add(RentalStatus.CREATED);
+        rentalStatuses.add(RentalStatus.IN_PROGRESS);
+        rentalStatuses.add(RentalStatus.FINISHED);
+        Page<com.vincenzo.bikehub.entity.Rental> rentalsEntitiesPage = rentalRepository.findByStatusInAndAccountUsername(null, rentalStatuses, username);
+        if (!rentalsEntitiesPage.isEmpty()) {
+            throw new RentalCreationException();
+        }
         Bicycle bicycleToRent = bicycleService.getBicycleModel(bicycleToRentId);
         if (bicycleToRent.getStatus() != BicycleStatus.AVAILABLE) {
             throw new BicycleNotAvailableException();
@@ -79,6 +98,7 @@ public class RentalService {
         rentalToSave.setBicycleId(bicycleToRentId);
         rentalToSave.setPickUpParkingLotName(bicycleToRent.getCurrentParkingLotName());
         String returnParkingLotName = rental.getReturnParkingLotName();
+        rentalToSave.setAccountUsername(user.getUsername());
         if (returnParkingLotName != null) {
             rentalToSave.setReturnParkingLotName(returnParkingLotName);
             bicycleToUpdate.setCurrentParkingLotName(returnParkingLotName);
@@ -212,13 +232,26 @@ public class RentalService {
         return updateRental(rentalId, rental);
     }
 
-    public RentalsPage retrieveRentals(Pageable paging) {
-        Page<com.vincenzo.bikehub.entity.Rental> rentalsEntitiesPage = rentalRepository.findAll(paging);
+    public RentalsPage retrieveRentals(Pageable paging, List<RentalStatus> statuses, String userUsername) {
+        Page<com.vincenzo.bikehub.entity.Rental> rentalsEntitiesPage;
+
+        if (userUsername != null && !statuses.isEmpty()) {
+            rentalsEntitiesPage = rentalRepository.findByStatusInAndAccountUsername(paging, statuses, userUsername);
+        } else if (userUsername != null) {
+            rentalsEntitiesPage = rentalRepository.findByAccountUsername(paging, userUsername);
+        } else if (!statuses.isEmpty()) {
+            rentalsEntitiesPage = rentalRepository.findByStatusIn(paging, statuses);
+        } else {
+            rentalsEntitiesPage = rentalRepository.findAll(paging);
+        }
+
         RentalsPage rentalsPage = new RentalsPage();
-        rentalsPage.setRentals(rentalsEntitiesPage.getContent().stream().map(rentalMapper::entityToModel).toList());
+        List<Rental> rentals = rentalsEntitiesPage.getContent().stream().map(rentalMapper::entityToModel).toList();
+        rentalsPage.setRentals(rentals);
         rentalsPage.setTotalPages(rentalsEntitiesPage.getTotalPages());
         rentalsPage.setCurrentPage(rentalsEntitiesPage.getNumber());
         rentalsPage.setTotalItems((int) rentalsEntitiesPage.getTotalElements());
+
         return rentalsPage;
     }
 

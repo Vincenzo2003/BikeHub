@@ -24,6 +24,8 @@ public class Rental {
 
     private UUID paymentMethodId;
 
+    private String accountUsername;
+
     private RentalStatus status;
 
     private Instant createdAt;

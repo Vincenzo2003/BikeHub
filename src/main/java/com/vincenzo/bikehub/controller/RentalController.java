@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,8 +38,9 @@ public class RentalController implements RentalApi, RentalsApi {
     @Override
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<com.vincenzo.bikehub.server.gen.model.Rental> createRental(CreateRental createRentalRequest) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Rental serializedRentalModel = rentalMapper.createRentalToModel(createRentalRequest);
-        Rental createdRentalModel = commandExecutor.executeCommand(new BookRentalCommand(rentalService, serializedRentalModel));
+        Rental createdRentalModel = commandExecutor.executeCommand(new BookRentalCommand(rentalService, serializedRentalModel, userDetails.getUsername()));
         com.vincenzo.bikehub.server.gen.model.Rental response = rentalMapper.modelToRental(createdRentalModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -88,9 +90,9 @@ public class RentalController implements RentalApi, RentalsApi {
     }
 
     @Override
-    public ResponseEntity<RentalsPage> retrieveRentals(Integer page, Integer count) {
+    public ResponseEntity<RentalsPage> retrieveRentals(Integer page, Integer count, String userUsername, List<RentalStatus> statuses) {
         Pageable paging = PageRequest.of(page, count);
-        com.vincenzo.bikehub.models.RentalsPage rentalsPage = rentalService.retrieveRentals(paging);
+        com.vincenzo.bikehub.models.RentalsPage rentalsPage = rentalService.retrieveRentals(paging, statuses, userUsername);
         com.vincenzo.bikehub.server.gen.model.RentalsPage response = rentalMapper.rentalsPageModelToRentalsPage(rentalsPage);
         return ResponseEntity.ok(response);
     }

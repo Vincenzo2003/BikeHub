@@ -61,6 +61,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
     }
 
+    @ExceptionHandler(RentalCreationException.class)
+    public ResponseEntity<ExceptionResponse> handleRentalCreationException(RentalCreationException exception, HttpServletRequest request) {
+        ExceptionResponse exceptionResponse = mapCustomException(exception, request);
+        return new ResponseEntity<>(exceptionResponse, exception.getStatusCode());
+    }
+
     @ExceptionHandler(RentalStatusException.class)
     public ResponseEntity<ExceptionResponse> handleRentalStatusException(RentalStatusException exception, HttpServletRequest request) {
         ExceptionResponse exceptionResponse = mapCustomException(exception, request);

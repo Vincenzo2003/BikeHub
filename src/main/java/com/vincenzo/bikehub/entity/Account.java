@@ -36,10 +36,10 @@ public class Account {
     @Column(nullable = false)
     private AccountRole role;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<PaymentMethod> paymentMethods;
 
-    @OneToMany(cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "account", cascade = {CascadeType.PERSIST})
     private List<Rental> rentals;
 
 }

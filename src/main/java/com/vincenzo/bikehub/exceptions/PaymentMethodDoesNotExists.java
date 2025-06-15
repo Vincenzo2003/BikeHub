@@ -6,7 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 public class PaymentMethodDoesNotExists extends ResponseStatusException {
-    public PaymentMethodDoesNotExists(PaymentType paymentType) {
-        super(HttpStatus.NOT_FOUND, "Payment method with type %s not found.".formatted(paymentType));
+    public PaymentMethodDoesNotExists(PaymentType paymentType, String username) {
+        super(HttpStatus.NOT_FOUND, "Payment method with type %s not found for user %s.".formatted(paymentType, username));
     }
 }

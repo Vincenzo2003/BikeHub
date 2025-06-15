@@ -30,12 +30,14 @@ public abstract class RentalMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "totalPrice", ignore = true)
     @Mapping(target = "mileage", ignore = true)
+    @Mapping(target = "accountUsername", ignore = true)
     public abstract Rental createRentalToModel(CreateRental createRentalRequest);
 
     @Mapping(target = "bicycleId", source = "bicycle.id")
     @Mapping(target = "pickUpParkingLotName", source = "pickUpParkingLot.name")
     @Mapping(target = "returnParkingLotName", source = "returnParkingLot.name")
     @Mapping(target = "paymentMethodId", source = "paymentMethod.id")
+    @Mapping(target = "accountUsername", ignore = true)
     public abstract Rental entityToModel(com.vincenzo.bikehub.entity.Rental rental);
 
     public abstract com.vincenzo.bikehub.server.gen.model.Rental modelToRental(Rental rental);
@@ -47,6 +49,7 @@ public abstract class RentalMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "startedAt", ignore = true)
     @Mapping(target = "finishedAt", ignore = true)
+    @Mapping(target = "accountUsername", ignore = true)
     public abstract Rental updateRentalRequestToModel(UpdateRental updateRentalRequest);
 
     @Mapping(target = "results", source = "rentals")

@@ -35,6 +35,9 @@ public class Rental{
     @ManyToOne
     private ParkingLot returnParkingLot;
 
+    @ManyToOne
+    private Account account;
+
     @Column(nullable = false)
     private com.vincenzo.bikehub.server.gen.model.RentalStatus status;
 
