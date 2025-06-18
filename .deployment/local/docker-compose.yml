@@ -1,0 +1,31 @@
+services:
+  bikehub:
+    build:
+      context: ./../../
+    image: bikehub
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./env/bikehub
+    depends_on:
+      - bikehub-db
+    networks:
+      bikehub-network:
+
+  bikehub-db:
+    image: postgres:15
+    expose:
+      - "5432"
+    env_file:
+      - ./env/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      bikehub-network:
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+
+networks:
+  bikehub-network:
+volumes:
+  postgres-volume:

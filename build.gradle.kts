@@ -8,6 +8,11 @@ plugins {
 group = "com.vincenzo.bikehub"
 version = "1.0-SNAPSHOT"
 
+tasks.bootJar {
+    archiveBaseName.set("bikehub")
+    archiveVersion.set("")
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(23)
@@ -58,7 +63,7 @@ java {
 tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("generateBikeHub") {
     generatorName.set("spring")
 
-    inputSpec.set("$rootDir/src/main/resources/openapi/bikehub.yaml")
+    inputSpec.set("$rootDir/src/main/resources/openapi/BikeHub.yaml")
     outputDir.set(layout.buildDirectory.dir("generated/bikehub").get().asFile.absolutePath)
     packageName.set("com.vincenzo.bikehub.server.gen")
     apiPackage.set("com.vincenzo.bikehub.server.gen.controller")
